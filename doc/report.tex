@@ -100,15 +100,14 @@ This is probably the most important part of the report. In here you must describ
    %\topcaption{Table captions are better up top} % requires the topcapt package
    \begin{tabular}{@{} lcr @{}} % Column formatting, @{} suppresses leading/trailing space
       \toprule
-      \multicolumn{2}{c}{Item} \\
       \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
-	GCD    & Single Processor & Dual processor (\$)\\
+	GCD	& Single Processor	& Dual processor	& Hardware accelerated\\
       \midrule
-      10      & 2433868 & 13.65 \\
-      30           & 1846630    &  0.01 \\
-      50       & 13142315 & 92.50 \\
-      70       & 1479966 & 33.33 \\
-      100 & 3152887   &  8.99 \\
+      10	& 24978			& 12726			&1595\\
+      30	& 1992704		&  928490		&100623\\
+      50	& 17097			& 9207			&2485\\
+      70	& 108319		& 58745			&7688\\
+     100	& 37876			&  21217		&5129\\
       \bottomrule
    \end{tabular}
    \caption{Clockcycles using the different solutions.}
