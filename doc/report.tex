@@ -171,11 +171,12 @@ Give the FPGA resources consumed by each of your solutions. Explain how these re
 \end{table}
 
 \subsection{Power and Energy}
-The power and energy consumption are also important for a design. The XPower Analyser that comes with the Xilinx ISE helps you determine the power consumption for your designs. Have a look at the hierarchical breakdown of power consumption and identify the parts of your design that consume a lot of power. Also, as you know energy is the time integral of power:
+The power and energy consumption are presented in Table 3. The power has been captured with the XPower Analyser that comes with the Xilinx ISE. The energy consumption has been calculated using (1).The clock cycles are choosen from the gcd with 50 numbers presented in Table 1. 
 \begin{equation}
 E = P \Delta t = P *(frequency*clock cycles)
 \end{equation}
-How do your different solutions compare from the power and energy consumption point of view?
+The power consumption are very alike in all solutions. The base value has to be the single processor solution since it uses as little of the boards resources as possible. There is a raise in the dual processor solution that comes with the added processor. In the hardware accelerated solution there is a slight raise, this is due to the added VHDL core.
+However in the energy consumption there is a significant difference. This is not unexpected since the amount of clock cycles are very different. From the equation(1) its quite easy to see how the time influences the energy consumption. The difference in the single and dual processor power doesn't influence much on the result since the clock cycles are halfed.
 
 \begin{table}[htbp]
    \centering
