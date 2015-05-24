@@ -92,7 +92,7 @@ Use pictures and timing diagrams, such as the one in Figure \ref{fig:example}. D
 \end{figure}
 
 \section{Measurements and Discussion}
-The following chapter describes the results gained through the experiments. 
+The following chapter describes the results gained through the experiments. The clock cycles where measured when the core/cores started to share data and perform calculations. It does not include reading input or writing output through the terminal.
 %This is probably the most important part of the report. In here you must describe the what and how you measure. Describe any specific parts in the hardware architecture or the software that help you conduct measurements. You should use graphs or tables to present your results, such as Table \ref{tab:example} or \ref{tab:example2}, but do not forget to describe the measures and units in the columns or graph axis.
 
 % Requires the booktabs if the memoir class is not being used
@@ -136,7 +136,7 @@ The following chapter describes the results gained through the experiments.
 Say a few words about the complexity of the different solutions and how long did it take to reach a working design.
  
 \subsection{Performance}
-The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used togheter with hardware support from the board.
+The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used together with hardware support from the board. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
 
 Give the performance figures for your solutions. Note that both the number of clock cycles \textsc{and} the clock frequency is important for performance! 
 
