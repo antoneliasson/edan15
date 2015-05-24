@@ -40,13 +40,17 @@ This is the part where you give background information and prepare the reader to
 
 \textit{The rest of the report is organized as follows. Section \ref{sec:exp} describes the experimental setup of each of the four labs. \ldots} Half a page for introduction will suffice.
 \section{Experiments}\label{sec:exp}
-Describe overall. Target platform. Microblaze. Xilinx FPGA platform Xilinx ISE Design Suite 14.x Digilent Nexys-3
+The experiment was divided into 5 lab sessions. The goal was to evaluate software and harware solutions running on a Xilinix FPGA platform. The board used for testing was a Digilent Nexys-3.  
+
+%Describe overall. Xilinx ISE Design Suite 14.x Digilent Nexys-3
 
 First laboratory was to implement and compare two pure soft-ware solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
 
 Second laboratory session was to implement and evaluate again a pure software solution of a gcd algorithm for N numbers. This time the architecture should use a multi-processor system. The system uses two MicroBlaze processors, working on the same data set.
 
-Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
+Third and fourth  laboratory session was to choose a part of the gcd algorithm for N number and implement it in hardware. The hardware part was writen and simulated in VHDL using Xilinx ISE.  The hardware should input/output data following a protocol specifed in the laboratory manual.
+
+%Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
 The software algorithm choosen was the Euclidean subtration algorithm. This was choosen to avoid the need of calculations using division, modulo and recursion. The algorithm is very simple and well defined. 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Working on your report},label=lst:example]
