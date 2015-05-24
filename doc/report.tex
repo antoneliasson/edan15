@@ -44,7 +44,7 @@ This document contain our experiments and results from 5 laboratory sessions.
 
 %\textit{The rest of the report is organized as follows. Section \ref{sec:exp} describes the experimental setup of each of the four labs. \ldots} Half a page for introduction will suffice.
 \section{Experiments}\label{sec:exp}
-The experiment was divided into 5 lab sessions. The goal was to evaluate software and harware solutions running on a Xilinix FPGA platform. The board used for testing was a Digilent Nexys-3.  
+The experiment was divided into 5 lab sessions. The goal was to evaluate software and harware solutions running on a Xilinix FPGA platform. The board used for testing was a Digilent Nexys-3. All software was developed using C.  
 
 %mention AXI? //Daniel
 %Describe overall. Xilinx ISE Design Suite 14.x Digilent Nexys-3
@@ -78,7 +78,9 @@ The single processor system was implemented using a single MicroBlaze core. Soft
 The dual processor system was implemented using two separate MicroBlaze cores. The communicated using two FSL-connections connected to each core. This was choosen over sharing memory between the two cores. Relation between the cores was divided into master/slave where one core acted as the master. The software was divided onto the two cores accordingly with the master/slave principle. Software on the master core was responsible for fetching the input data, split it and send half of it to the slave core. The slave core contained only the code for communcating through FSL and calculating gcd. Both cores calculated gcd for their half the data set. Final caluclation was done on the master core after the slave had returned the gcd for the data set on the slave core.
 %Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 \subsection{Hardware accelerated}
-Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
+The part choosen for hardware acceleration was the gcd algorithm. More specific gcd for two numbers and not N numbers. The hardware runs on a custom IP-core on the same board as the MicroBlaze core running the software. The software reads input and output each element in the data set through FSL-communication to the hardware core.  
+
+%Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 
 Use pictures and timing diagrams, such as the one in Figure \ref{fig:example}. Do explain every picture and diagram.
 
