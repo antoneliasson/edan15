@@ -54,7 +54,7 @@ Last laboratory session was to integrate the hardware developed in the previous 
 
 %Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
-The software algorithm choosen was the Euclidean subtration algorithm. This was choosen to avoid the need of calculations using division, modulo and recursion. The algorithm is very simple and well defined. 
+The software algorithm choosen was the Euclidean subtraction algorithm. This was choosen to avoid the need of calculations using division, modulo and recursion. The algorithm is very simple and well defined. 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Working on your report},label=lst:example]
 function gcd(a,b)
 	while(a != b) {
@@ -70,7 +70,8 @@ function gcd(a,b)
 \subsection{Single processor}
 Describe what is particular to this solution.
 \subsection{Dual processor}
-Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
+The dual processor system was implemented using two separate MicroBlaze cores. The communicated using two FSL-connections connected to each core. This was choosen over sharing memory between the two cores. Relation between the cores was divided into master/slave where one core acted as the master. The software was divided onto the two cores accordingly with the master/slave principle. Software on the master core was responsible for fetching the input data, split it and send half of it to the slave core. The slave core contained only the code for communcating through FSL and calculating gcd. The master and slave core calculated gcd for their share of the data and. Final caluclation was done on the master core after the slave had returned the gcd for the data set on the slave core.
+%Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 \subsection{Hardware accelerated}
 Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 
