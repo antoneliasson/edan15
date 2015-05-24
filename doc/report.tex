@@ -177,6 +177,21 @@ E = \int_{t_1}^{t_2} P dt \approx P \Delta t
 \end{equation}
 How do your different solutions compare from the power and energy consumption point of view?
 
+\begin{table}[htbp]
+   \centering
+   %\topcaption{Table captions are better up top} % requires the topcapt package
+   \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
+      \toprule
+      \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
+		& Single Processor	& Dual processor	& Hardware accelerated\\
+      \midrule
+      Power(W)	& 0.163			& 0.172			& 0.164\\
+      \bottomrule
+   \end{tabular}
+   \caption{Clock cycles using the different solutions explained in chapter 2.}
+   \label{tab:Clockcycles}
+\end{table}
+
 \section{Summary}
 It has become very clear during the sessions how software and hardware relate to each other in question of performance.
 %In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
