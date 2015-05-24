@@ -149,6 +149,26 @@ In Listing 1 its easy to see that the clock cycles required to calculate the gcd
 \subsection{Device Utilization}
 Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
 
+
+\begin{table}[htbp]
+   \centering
+   %\topcaption{Table captions are better up top} % requires the topcapt package
+   \begin{tabular}{@{} lcr @{}} % Column formatting, @{} suppresses leading/trailing space
+      \toprule
+      \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
+	Name	& Single Processor	& Dual processor	& Hardware accelerated\\
+      \midrule
+      Number of slice registers	& 24978			& 12726			&1595\\
+      Number of slice LUT	& 1992704		&  928490		&100623\\
+      Number of occupied slices	& 17097			& 9207			&2485\\
+      70	& 108319		& 58745			&7688\\
+     100	& 37876			&  21217		&5129\\
+      \bottomrule
+   \end{tabular}
+   \caption{Clock cycles using the different solutions explained in chapter 2.}
+   \label{tab:Utilization}
+\end{table}
+
 \subsection{Power and Energy}
 The power and energy consumption are also important for a design. The XPower Analyser that comes with the Xilinx ISE helps you determine the power consumption for your designs. Have a look at the hierarchical breakdown of power consumption and identify the parts of your design that consume a lot of power. Also, as you know energy is the time integral of power:
 \begin{equation}
@@ -157,7 +177,8 @@ E = \int_{t_1}^{t_2} P dt \approx P \Delta t
 How do your different solutions compare from the power and energy consumption point of view?
 
 \section{Summary}
-In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
+It has become very clear during the sessions how software and hardware relate to each other in question of performance.
+%In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
 
 \bibliographystyle{plain}
 \bibliography{abibfile}
