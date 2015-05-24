@@ -12,7 +12,7 @@
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{url}
 
-\title{Title of your choice\\\small{(EDAN15 VT10 Final Report)}\footnote{Leave the subtitle in!}}
+\title{Embedded system, from software to hardware\\\small{(EDAN15 VT15 Final Report)}}
 \author{
 Anton Eliasson, \texttt{dat11ael@student.lu.se}\\
 Daniel Lundell, \texttt{daniel.lundell.746@student.lu.se}
@@ -33,22 +33,30 @@ Brief description of the report. Context, hypothesis, experiments, results, conc
 information about the rest of the document, but not too many details. Between 5--10 lines in this format.
 \end{abstract}
 \section{Introduction}
+This is the lab report on the laboratory work in the Embedded Systems Design(EDAN15) course at LTH.
+
+
 This is the part where you give background information and prepare the reader to deal with the rest of the document. \textit{This is the final report on the laboratory work in the Embedded Systems Design (EDAN15) course, LTH \ldots} Describe the lab work organization, its relation to the rest of the course as you see it.
 
 \textit{The rest of the report is organized as follows. Section \ref{sec:exp} describes the experimental setup of each of the four labs. \ldots} Half a page for introduction will suffice.
 \section{Experiments}\label{sec:exp}
+Describe overall. Target platform. Microblaze. Xilinx FPGA platform Xilinx ISE Design Suite 14.x Digilent Nexys-3
+
+First laboratory was to implement and compare two pure soft-ware solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
+
+
 Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
-If required, do have a subsection describing the algorithms and motivate your choice for them. You may use pseudo-code listings to show how the algorithms work, as in Listing~\ref{lst:example}. \textbf{Note:} an explanation associated with each figure, listing or table is absolutely necessary! Do not forget references \cite{1214341}.
+The software algorithm choosen was the Euclidean subtration algorithm. This was choosen to avoid the need of calculations using division, modulo and recursion. The algorithm is very simple and well defined. 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Working on your report},label=lst:example]
-#include <references.h>
-int main() {
-	while(isDone) {
-		addparagraph("The GCD implementation...");
-		addreferences();
-		if(!spellcheck()) error("corrections needed");
+function gcd(a,b)
+	while(a != b) {
+		if a>b
+			a = a-b
+		else
+			b = b-a
 	}
-	return 1;
+	return a;
 }
 \end{lstlisting}
 
