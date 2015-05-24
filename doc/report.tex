@@ -112,7 +112,7 @@ The following chapter describes the results gained through the experiments. The 
       \bottomrule
    \end{tabular}
    \caption{Clock cycles using the different solutions explained in chapter 2.}
-   \label{tab:example}
+   \label{tab:Clockcycles}
 \end{table}
 
 %\begin{table}[htbp]
@@ -136,14 +136,16 @@ The following chapter describes the results gained through the experiments. The 
 Say a few words about the complexity of the different solutions and how long did it take to reach a working design.
  
 \subsection{Performance}
-The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used together with hardware support from the board. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
+The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used together with hardware support from the board. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor solution. This was not quite expected, we expected the FSL link to require more clock cycles. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
 
-Give the performance figures for your solutions. Note that both the number of clock cycles \textsc{and} the clock frequency is important for performance! 
+The hardware accelerated solution is significantly faster than both the single and dual processor solution.
 
-Discuss how and why the figures are different in between solutions. Discuss how these figures are different from your expectation. For example, should a dual processor system be twice faster than a single processor system? Is it? Why?
-How about compiler optimizations? 
+%Give the performance figures for your solutions. Note that both the number of clock cycles \textsc{and} the clock frequency is important for performance! 
 
-Explain whether and how the data sets your algorithm operates on influence the results. For example, why computing the something for 10 numbers is slower than computing the same thing for 30 numbers?
+%Discuss how and why the figures are different in between solutions. Discuss how these figures are different from your expectation. For example, should a dual processor system be twice faster than a single processor system? Is it? Why?
+%How about compiler optimizations? 
+
+%Explain whether and how the data sets your algorithm operates on influence the results. For example, why computing the something for 10 numbers is slower than computing the same thing for 30 numbers?
 
 \subsection{Device Utilization}
 Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
