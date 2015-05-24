@@ -111,31 +111,33 @@ The following chapter describes the results gained through the experiments.
      100	& 37876			&  21217		&5129\\
       \bottomrule
    \end{tabular}
-   \caption{Clockcycles using the different solutions.}
+   \caption{Clock cycles using the different solutions explained in chapter 2.}
    \label{tab:example}
 \end{table}
 
-\begin{table}[htbp]
-   \centering 
- \begin{tabular}{cc|c|c|c|c|l}
-\cline{3-6}
-& & \multicolumn{4}{|c|}{Primes} \\ \cline{3-6}
-& & 2 & 3 & 5 & 7 \\ \cline{1-6}
-\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
-\multicolumn{1}{|c|}{504} & 3 & 2 & 0 & 1 &     \\ \cline{2-6}
-\multicolumn{1}{|c|}{}                        &
-\multicolumn{1}{|c|}{540} & 2 & 3 & 1 & 0 &     \\ \cline{1-6}
-\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
-\multicolumn{1}{|c|}{gcd} & 2 & 2 & 0 & 0 & min \\ \cline{2-6}
-\multicolumn{1}{|c|}{}                        &
-\multicolumn{1}{|c|}{lcm} & 3 & 3 & 1 & 1 & max \\ \cline{1-6}
-\end{tabular}
-  \caption{Uses \textit{multirow} \LaTeX package}
-   \label{tab:example2}
-\end{table}
+%\begin{table}[htbp]
+%   \centering 
+% \begin{tabular}{cc|c|c|c|c|l}
+%\cline{3-6}
+%& & \multicolumn{4}{|c|}{Primes} \\ \cline{3-6}
+%& & 2 & 3 & 5 & 7 \\ \cline{1-6}
+%\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
+%\multicolumn{1}{|c|}{504} & 3 & 2 & 0 & 1 &     \\ \cline{2-6}
+%\multicolumn{1}{|c|}{}                        &
+%\multicolumn{1}{|c|}{540} & 2 & 3 & 1 & 0 &     \\ \cline{1-6}
+%\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
+%\multicolumn{1}{|c|}{gcd} & 2 & 2 & 0 & 0 & min \\ \cline{2-6}
+%\multicolumn{1}{|c|}{}                        &
+%\multicolumn{1}{|c|}{lcm} & 3 & 3 & 1 & 1 & max \\ \cline{1-6}
+%\end{tabular}
+%  \caption{Uses \textit{multirow} \LaTeX package}
+%   \label{tab:example2}
+%\end{table}
 Say a few words about the complexity of the different solutions and how long did it take to reach a working design.
  
 \subsection{Performance}
+The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used togheter with hardware support from the board.
+
 Give the performance figures for your solutions. Note that both the number of clock cycles \textsc{and} the clock frequency is important for performance! 
 
 Discuss how and why the figures are different in between solutions. Discuss how these figures are different from your expectation. For example, should a dual processor system be twice faster than a single processor system? Is it? Why?
