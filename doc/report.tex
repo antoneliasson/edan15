@@ -54,13 +54,13 @@ The first laboratory was to implement and compare two pure software solution of 
 
 The second laboratory session was to implement and evaluate again a pure software solution of a GCD algorithm for N numbers. This time the architecture should use a multi-processor system. The system uses two MicroBlaze processors, working on the same data set.
 
-The third and fourth laboratory session was to select a part of the GCD algorithm for N number and implement it in hardware. The hardware part was writen and simulated in VHDL using Xilinx ISE.  The hardware should input/output data following a protocol specifed in the laboratory manual.
+The third and fourth laboratory session was to select a part of the GCD algorithm for N numbers and implement it in hardware. The hardware core is first written in VHDL and simulated using Xilinx ISE. It communicates with the processor using a Fast Simplex Link interface\cite{fsl}.
 
-Last laboratory session was to integrate the hardware developed in the previous session into a larger system. The system should contain software to write the necessary communication and computations, to obtain a functioning hardware/software solution for the GCD of N-numbers problem.
+The last laboratory session was to integrate the hardware developed in the previous sessions into a larger system. It has software to communicate with the operator over a serial link, similar to the uniprocessor solution, but uses the hardware core for the actual computations.
 
 %Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
-The software algorithm choosen was the Euclidean subtraction algorithm. This was choosen to avoid the need of calculations using division, modulo and recursion. The algorithm is very simple and well defined. 
+The software algorithm chosen was the Euclidean subtraction algorithm. This was chosen to avoid the need of calculations using division, modulo and recursion, making it well suited for hardware implementation. The algorithm is very simple % and well defined. ?
 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:example]
 function gcd(a,b)
