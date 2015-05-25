@@ -29,34 +29,34 @@ Daniel Lundell, \texttt{ada10dlu@student.lu.se}
 \maketitle
 
 \begin{abstract}
-This report looks at the use of software and hardware solutions on FPGA boards carried out in 5 sessions. The solutions are measured and discussed from three perspectives performance, utilization and power. It's generally known that hardware implementations are faster than pure software implementations. This is tested during the sessions. A significant improvment can be noted in performance when the solutions goes towards hardware solutions. Their is also an improvement in utilization and power depending on the solution.
+This report looks at the use of software and hardware solutions on FPGA boards carried out in 5 sessions. The solutions are profiled and discussed from three perspectives: performance, utilization and power. It's generally known that hardware implementations are faster than pure software implementations. This was tested during the sessions. A significant performance improvement can be observed when the solutions go towards hardware solutions.
+
+% Inte helt sant; förtydliga: There is also an improvement in utilization and power depending on the solution.
 %	Brief description of the report. Context, hypothesis, experiments, results, conclusion. The abstract should contain enough
 %information about the rest of the document, but not too many details. Between 5--10 lines in this format.
 \end{abstract}
+
 \section{Introduction}
-This is the lab report on the laboratory work in the Embedded Systems Design(EDAN15) course at LTH. The purpose of the laboratory is too use and implement an embedded system hands-on. Too see how different software and hardware solutions differ in relation to effiency, power and utilization. Starting off with pure software solution and slowly descend into hardware solutions. In addtion the purpose is to explore the framework and tool chains related to developing embedded systems. The embedded system used in the laboratory is an FPGA platform.
+This is a report on the laboratory work in the \emph{Design of Embedded Systems (EDAN15)} course at LTH. The purpose of the laboratories is to use and implement an embedded system and to observe how different implementations differ in relation to effiency, power and hardware utilization. The assignment is first solved with a pure software solution which is later parallelized and then transformed into a hardware accelerated solution. In addtion the purpose is to explore frameworks and tool chains used in development of embedded systems. The embedded system used in the laboratory is a Xilinx FPGA platform.
 
-This part of the course is the practical part where the rest the course is more theorethical.
-
-The rest of the report is organized as follows. Chapter 2 describe the experiments conducted throughout the 5 laboratory sessions. Chapter 3 presents the measurments and dicussions gained from the experiements in chapter 2. Chapter 4 concludes the report with a summary.
+The report is organized as follows. Chapter~\ref{sec:exp} describes the experiments conducted throughout the five laboratory sessions. Chapter~\ref{sec:measurements} presents and discusses the measurements obtained during the experiments. Chapter~\ref{sec:summary} concludes the report with a summary.
 
 
 %This is the part where you give background information and prepare the reader to deal with the rest of the document. \textit{This is the final report on the laboratory work in the Embedded Systems Design (EDAN15) course, LTH \ldots} Describe the lab work organization, its relation to the rest of the course as you see it.
 
 %\textit{The rest of the report is organized as follows. Section \ref{sec:exp} describes the experimental setup of each of the four labs. \ldots} Half a page for introduction will suffice.
-\section{Experiments}\label{sec:exp}
-The experiment was divided into 5 lab sessions. The goal was to evaluate software and harware solutions running on a Xilinix FPGA platform. The board used for testing was a Digilent Nexys-3. All software was developed using C.  
-In every solution the performance, utilization and power was recorded for measurments.
+\section{Experiments\label{sec:exp}}
+The experiments were carried out over five lab sessions. The goal was to evaluate software and hardware solutions running on a Xilinix Digilent Nexys-3 FPGA platform. All software was developed in C. In every solution the performance (run-time), FPGA area utilization and power was recorded for later comparison.
 %mention AXI? //Daniel
 %Describe overall. Xilinx ISE Design Suite 14.x Digilent Nexys-3
 
-First laboratory was to implement and compare two pure software solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
+The first laboratory was to implement and compare two pure software solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
 
-Second laboratory session was to implement and evaluate again a pure software solution of a gcd algorithm for N numbers. This time the architecture should use a multi-processor system. The system uses two MicroBlaze processors, working on the same data set.
+The second laboratory session was to implement and evaluate again a pure software solution of a GCD algorithm for N numbers. This time the architecture should use a multi-processor system. The system uses two MicroBlaze processors, working on the same data set.
 
-Third and fourth  laboratory session was to choose a part of the gcd algorithm for N number and implement it in hardware. The hardware part was writen and simulated in VHDL using Xilinx ISE.  The hardware should input/output data following a protocol specifed in the laboratory manual.
+The third and fourth laboratory session was to select a part of the GCD algorithm for N number and implement it in hardware. The hardware part was writen and simulated in VHDL using Xilinx ISE.  The hardware should input/output data following a protocol specifed in the laboratory manual.
 
-Last laboratory session was to integrate the hardware developed in the previous session into a larger system. The system should contain software to write the necessary communication and computations, to obtain a functioning hardware/software solution for the gcd of N-numbers problem.
+Last laboratory session was to integrate the hardware developed in the previous session into a larger system. The system should contain software to write the necessary communication and computations, to obtain a functioning hardware/software solution for the GCD of N-numbers problem.
 
 %Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
@@ -75,13 +75,13 @@ function gcd(a,b)
 \end{lstlisting}
 
 \subsection{Single processor}
-The single processor system was implemented using a single MicroBlaze core. Software handled reading data from the serial port, calculate gcd and output it too the user. The gcd used is the one described above.
+The single processor system was implemented using a single MicroBlaze core. Software handled reading data from the serial port, calculate GCD and output it too the user. The GCD used is the one described above.
 
 \subsection{Dual processor}
-The dual processor system was implemented using two separate MicroBlaze cores. The communicated using two FSL-connections connected to each core. This was choosen over sharing memory between the two cores. Relation between the cores was divided into master/slave where one core acted as the master. The software was divided onto the two cores accordingly with the master/slave principle. Software on the master core was responsible for fetching the input data, split it and send half of it to the slave core. The slave core contained only the code for communcating through FSL and calculating gcd. Both cores calculated gcd for their half the data set. Final caluclation was done on the master core after the slave had returned the gcd for the data set on the slave core.
+The dual processor system was implemented using two separate MicroBlaze cores. The communicated using two FSL-connections connected to each core. This was choosen over sharing memory between the two cores. Relation between the cores was divided into master/slave where one core acted as the master. The software was divided onto the two cores accordingly with the master/slave principle. Software on the master core was responsible for fetching the input data, split it and send half of it to the slave core. The slave core contained only the code for communcating through FSL and calculating GCD. Both cores calculated GCD for their half the data set. Final caluclation was done on the master core after the slave had returned the GCD for the data set on the slave core.
 %Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 \subsection{Hardware accelerated}
-The part choosen for hardware acceleration was the gcd algorithm. More specific gcd for two numbers and not N numbers. The hardware runs on a custom IP-core on the same board as the MicroBlaze core running the software. The software reads input and output each element in the data set through FSL-communication to the hardware core.  
+The part choosen for hardware acceleration was the GCD algorithm. More specific GCD for two numbers and not N numbers. The hardware runs on a custom IP-core on the same board as the MicroBlaze core running the software. The software reads input and output each element in the data set through FSL-communication to the hardware core.  
 
 %Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 
@@ -94,7 +94,7 @@ Use pictures and timing diagrams, such as the one in Figure \ref{fig:example}. D
 %    \label{fig:example}
 % \end{figure}
 
-\section{Measurements and Discussion}
+\section{Measurements and Discussion\label{sec:measurements}}
 The following chapter describes the results gained through the experiments. The clock cycles where measured when the core/cores started to share data and perform calculations. It does not include reading input or writing output through the terminal.
 %This is probably the most important part of the report. In here you must describe the what and how you measure. Describe any specific parts in the hardware architecture or the software that help you conduct measurements. You should use graphs or tables to present your results, such as Table \ref{tab:example} or \ref{tab:example2}, but do not forget to describe the measures and units in the columns or graph axis.
 
@@ -141,9 +141,9 @@ Say a few words about the complexity of the different solutions and how long did
 \subsection{Performance}
 The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used together with hardware support from the board. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor solution. This was not quite expected, we expected the FSL link to require more clock cycles. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
 
-The hardware accelerated solution is significantly faster than both the single and dual processor solution. The custom IP core written in VHDL is significantly faster than the MicroBlaze core. The gcd algorithm is moved completley to a hardware solution. The MicroBlaze core is only responsible for FSL communication(and input/output but its not measured). A drawback with our solution is the lack of a gcd for N numbers, ours only provide a gcd for 2 numbers. This requires our VHDL core to wait for the MicroBlaze core each calculation. A faster solution could bave been implemented using a N number gcd in VHDL. Our expectations where quite right, we assumed the hardware solution would be faster but not that much faster. We also assumed we wouldnt get a fast result due to the 2 number gcd instead of the N number gcd.
+The hardware accelerated solution is significantly faster than both the single and dual processor solution. The custom IP core written in VHDL is significantly faster than the MicroBlaze core. The GCD algorithm is moved completley to a hardware solution. The MicroBlaze core is only responsible for FSL communication(and input/output but its not measured). A drawback with our solution is the lack of a GCD for N numbers, ours only provide a GCD for 2 numbers. This requires our VHDL core to wait for the MicroBlaze core each calculation. A faster solution could bave been implemented using a N number GCD in VHDL. Our expectations where quite right, we assumed the hardware solution would be faster but not that much faster. We also assumed we wouldnt get a fast result due to the 2 number GCD instead of the N number GCD.
 
-In Listing 1 its easy to see that the clock cycles required to calculate the gcd with 30 numbers is very much slower than the rest. This is due to a drawback in the euclidean algorithm. The effciency is described by the number of divisions required. Our version uses the subtraction method so instead of division requried its described by the number of subtractions needed. In the sample data(found at cs.lth.se/edan15/labs/assignments) it can be seen that the gcd for the file contaning 30 numbers is 3 while the gcd for 100 numbers is 587. It can also be noted that the number range is quite similar in both the sample files. This requires our algorithm to do a significant more amount of subtractions in the file contaning 30 numbers than the one containing 100 numbers. This increases the number of clock cycles required to calculate the gcd.
+In Listing 1 its easy to see that the clock cycles required to calculate the GCD with 30 numbers is very much slower than the rest. This is due to a drawback in the euclidean algorithm. The effciency is described by the number of divisions required. Our version uses the subtraction method so instead of division requried its described by the number of subtractions needed. In the sample data(found at cs.lth.se/edan15/labs/assignments) it can be seen that the GCD for the file contaning 30 numbers is 3 while the GCD for 100 numbers is 587. It can also be noted that the number range is quite similar in both the sample files. This requires our algorithm to do a significant more amount of subtractions in the file contaning 30 numbers than the one containing 100 numbers. This increases the number of clock cycles required to calculate the GCD.
 
 
 %How about compiler optimizations? 
@@ -173,7 +173,7 @@ Give the FPGA resources consumed by each of your solutions. Explain how these re
 \end{table}
 
 \subsection{Power and Energy}
-The power and energy consumption are presented in Table 3. The power has been captured with the XPower Analyser that comes with the Xilinx ISE. The energy consumption has been calculated using (1).The clock cycles are choosen from the gcd with 50 numbers presented in Table 1. 
+The power and energy consumption are presented in Table 3. The power has been captured with the XPower Analyser that comes with the Xilinx ISE. The energy consumption has been calculated using (1).The clock cycles are choosen from the GCD with 50 numbers presented in Table 1. 
 \begin{equation}
 E = P \Delta t = P *(frequency*clock cycles)
 \end{equation}
@@ -193,11 +193,11 @@ However in the energy consumption there is a significant difference. This is not
       Energy	& 0.000027873 		& 0.00001583604		& 0.0000040754\\
       \bottomrule
    \end{tabular}
-   \caption{Power consumption and energy calculated using the gcd for 50 numbers in Listing 1}
+   \caption{Power consumption and energy calculated using the GCD for 50 numbers in Listing 1}
    \label{tab:Clockcycles}
 \end{table}
 
-\section{Summary}
+\section{Summary\label{sec:summary}}
 It has become very clear during the sessions how software and hardware relate to each other in question of performance.
 %In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
 
