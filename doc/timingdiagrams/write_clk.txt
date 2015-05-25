@@ -1,0 +1,19 @@
+Clk=0;
+D_out=X;
+Wr_en=0;
+Full=0;
+Buffer=X;
+.
+Clk=clock;
+D_out=D0;
+Wr_en=1;
+.
+Wr_en=1;
+Wr_en => Buffer=D0;
+D_out=D1;
+.
+Wr_en=1;
+Wr_en => Buffer="D1/D0";
+D_out=X;
+.
+Wr_en=0;
