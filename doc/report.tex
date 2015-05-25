@@ -60,9 +60,9 @@ The last laboratory session was to integrate the hardware developed in the previ
 
 %Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
-The software algorithm chosen was the Euclidean subtraction algorithm. This was chosen to avoid the need of calculations using division, modulo and recursion, making it well suited for hardware implementation. The algorithm is very simple % and well defined. ?
+The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. The algoritm in pseudocode to calculate the GCD for two integers is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
 
-\begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:example]
+\begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:gcd]
 function gcd(a,b)
 	while(a != b) {
 		if a>b
@@ -70,29 +70,28 @@ function gcd(a,b)
 		else
 			b = b-a
 	}
-	return a;
+	return a
 }
 \end{lstlisting}
 
 \subsection{Single processor}
-The single processor system was implemented using a single MicroBlaze core. Software handled reading data from the serial port, calculate GCD and output it too the user. The GCD used is the one described above.
+The single processor system was implemented using a single MicroBlaze core. A simple software program reads data from the serial port, calculate the GCD and outputs it to the user. The GCD used is the one described above.
 
 \subsection{Dual processor}
-The dual processor system was implemented using two separate MicroBlaze cores. The communicated using two FSL-connections connected to each core. This was choosen over sharing memory between the two cores. Relation between the cores was divided into master/slave where one core acted as the master. The software was divided onto the two cores accordingly with the master/slave principle. Software on the master core was responsible for fetching the input data, split it and send half of it to the slave core. The slave core contained only the code for communcating through FSL and calculating GCD. Both cores calculated GCD for their half the data set. Final caluclation was done on the master core after the slave had returned the GCD for the data set on the slave core.
+The dual processor system was implemented using two identical MicroBlaze cores with separate memory. The two cores communicates using two unidirectional Fast Simplex Links (FSL), creating a bidirectional interface. A master-slave model of communication between the cores was used. The master core receives data from the serial link, splits the data set into two halves and sends one half over FSL to the slave core. The cores calculate the GCD for their own halves separately and in the end the slave sends its result back over FSL. The master computes the GCD for the final two values and sends the result back over the serial link.
+% TODO: flytta till diskussion: This was choosen over sharing memory between the two cores. 
 %Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 \subsection{Hardware accelerated}
-The part choosen for hardware acceleration was the GCD algorithm. More specific GCD for two numbers and not N numbers. The hardware runs on a custom IP-core on the same board as the MicroBlaze core running the software. The software reads input and output each element in the data set through FSL-communication to the hardware core.  
+The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial and outputs each element in the data set over FSL to the hardware core. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL.
 
 %Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
 
-Use pictures and timing diagrams, such as the one in Figure \ref{fig:example}. Do explain every picture and diagram.
-
-% \begin{figure}[!htb]
-%    \centering
-%    \includegraphics[width=0.6\textwidth]{example} 
-%    \caption{A figure example}
-%    \label{fig:example}
-% \end{figure}
+\begin{figure}[!htb]
+   \centering
+   \includegraphics[width=1\textwidth]{timingdiagrams/write_noclock.pdf}
+   \caption{Timing diagram for an FSL write operation}
+   \label{fig:fsl-write}
+\end{figure}
 
 \section{Measurements and Discussion\label{sec:measurements}}
 The following chapter describes the results gained through the experiments. The clock cycles where measured when the core/cores started to share data and perform calculations. It does not include reading input or writing output through the terminal.
