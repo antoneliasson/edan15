@@ -94,51 +94,32 @@ The part chosen for hardware acceleration was the GCD algorithm for two numbers.
 \end{figure}
 
 \section{Measurements and Discussion\label{sec:measurements}}
-The following chapter describes the results gained through the experiments. The clock cycles where measured when the core/cores started to share data and perform calculations. It does not include reading input or writing output through the terminal.
+This section describes the results obtained from the experiments. To get consistent results, the timer was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
 %This is probably the most important part of the report. In here you must describe the what and how you measure. Describe any specific parts in the hardware architecture or the software that help you conduct measurements. You should use graphs or tables to present your results, such as Table \ref{tab:example} or \ref{tab:example2}, but do not forget to describe the measures and units in the columns or graph axis.
 
 % Requires the booktabs if the memoir class is not being used
 \begin{table}[htbp]
    \centering
    %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
+   \begin{tabular}{rrrrr} % Column formatting, @{} suppresses leading/trailing space
       \toprule
-      \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
-	GCD	& Single Processor	& Dual processor	& Hardware accelerated\\
+	N & GCD & Single processor	& Dual processor	& Hardware accelerated\\
       \midrule
-      10	& 24978			& 12726			&1595\\
-      30	& 1992704		&  928490		&100623\\
-      50	& 17097			& 9207			&2485\\
-      70	& 108319		& 58745			&7688\\
-     100	& 37876			&  21217		&5129\\
+      10	& 71 & 24978			& 12726			&1595\\
+      30	& 3 & 1992704		&  928490		&100623\\
+      50	& 6211 & 17097			& 9207			&2485\\
+      70	& 128 & 108319		& 58745			&7688\\
+     100	& 587 & 37876			&  21217		&5129\\
       \bottomrule
    \end{tabular}
-   \caption{Clock cycles using the different solutions explained in chapter 2.}
+   \caption{Performance numbers with the different solutions implemented}
    \label{tab:Clockcycles}
 \end{table}
 
-%\begin{table}[htbp]
-%   \centering 
-% \begin{tabular}{cc|c|c|c|c|l}
-%\cline{3-6}
-%& & \multicolumn{4}{|c|}{Primes} \\ \cline{3-6}
-%& & 2 & 3 & 5 & 7 \\ \cline{1-6}
-%\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
-%\multicolumn{1}{|c|}{504} & 3 & 2 & 0 & 1 &     \\ \cline{2-6}
-%\multicolumn{1}{|c|}{}                        &
-%\multicolumn{1}{|c|}{540} & 2 & 3 & 1 & 0 &     \\ \cline{1-6}
-%\multicolumn{1}{|c|}{\multirow{2}{*}{Powers}} &
-%\multicolumn{1}{|c|}{gcd} & 2 & 2 & 0 & 0 & min \\ \cline{2-6}
-%\multicolumn{1}{|c|}{}                        &
-%\multicolumn{1}{|c|}{lcm} & 3 & 3 & 1 & 1 & max \\ \cline{1-6}
-%\end{tabular}
-%  \caption{Uses \textit{multirow} \LaTeX package}
-%   \label{tab:example2}
-%\end{table}
-Say a few words about the complexity of the different solutions and how long did it take to reach a working design.
- 
+
+
 \subsection{Performance}
-The performance figures are presented in Listing 1. When using the single and dual processor solution only software was used together with hardware support from the board. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor solution. This was not quite expected, we expected the FSL link to require more clock cycles. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
+The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor solution. This was not quite expected, we expected the FSL link to require more clock cycles. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
 
 The hardware accelerated solution is significantly faster than both the single and dual processor solution. The custom IP core written in VHDL is significantly faster than the MicroBlaze core. The GCD algorithm is moved completley to a hardware solution. The MicroBlaze core is only responsible for FSL communication(and input/output but its not measured). A drawback with our solution is the lack of a GCD for N numbers, ours only provide a GCD for 2 numbers. This requires our VHDL core to wait for the MicroBlaze core each calculation. A faster solution could bave been implemented using a N number GCD in VHDL. Our expectations where quite right, we assumed the hardware solution would be faster but not that much faster. We also assumed we wouldnt get a fast result due to the 2 number GCD instead of the N number GCD.
 
