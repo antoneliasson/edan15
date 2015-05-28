@@ -132,21 +132,21 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
 %Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
 
 \begin{table}[htbp]
-   \centering
-   %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
-      \toprule
-	Name	& Single processor	& Dual processor	& Hardware accelerated\\
-      \midrule
-      Number of slice registers	& 24978			& 12726			&1595\\
-      Number of slice LUT	& 1992704		&  928490		&100623\\
-      Number of occupied slices	& 17097			& 9207			&2485\\
-      70	& 108319		& 58745			&7688\\
-     100	& 37876			&  21217		&5129\\
-      \bottomrule
-   \end{tabular}
-   \caption{Clock cycles using the different solutions explained in chapter 2.}
-   \label{tab:Utilization}
+  \centering
+  % \topcaption{Table captions are better up top} % requires the topcapt package
+  \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
+    \toprule
+    Name & Single processor & Dual processor & Hardware accelerated & Available \\
+    \midrule
+    CLB Flip-Flops & 1,684 &  & 18,224 &  \\
+    LUTs used as logic &  &  &  & 9,112 \\
+    LUTs used as memory &  &  & 2,176 &  \\
+    Occupied Slices &  &  &  & 2,278 \\
+    16K block RAMs &  &  &  & 32 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Clock cycles using the different solutions explained in chapter 2.}
+  \label{tab:Utilization}
 \end{table}
 
 \subsection{Power and Energy}
