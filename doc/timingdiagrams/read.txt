@@ -1,0 +1,57 @@
+# Rendera med TimingDrawer till SVG:
+# http://sourceforge.net/projects/timingdrawer
+# Därefter omvandlas SVGn till PDF med Inkscape
+
+# 0
+Clk=0;
+Buffer="D1/D0";
+Rd_ack=0;
+D_in=D0;
+Exists=1;
+.
+# 1
+|
+Clk=1;
+.
+.
+Clk=0;
+.
+Rd_ack=1;
+.
+# 2
+|
+Clk=1;
+Rd_ack=1;
+.
+.
+Clk=0;
+Rd_ack=0;
+.
+.
+# 3
+|
+Clk=1;
+Buffer=D1;
+Rd_ack=1 => D_in=D1;
+.
+.
+Clk=0;
+.
+Rd_ack=1;
+.
+# 4
+|
+Clk=1;
+Rd_ack=1;
+.
+.
+Clk=0;
+Rd_ack=0;
+.
+.
+# 5
+|
+Clk=1;
+Buffer=X;
+Rd_ack=1 => D_in=X;
+Rd_ack=1 => Exists=0;
