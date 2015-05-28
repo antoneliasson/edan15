@@ -119,27 +119,24 @@ This section describes the results obtained from the experiments. To get consist
 
 
 \subsection{Performance}
-The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. When comparing the single and dual processor solution its quite easy to see that the required cycles are almost half of the single processor. This includes sending data through the FSL, still its almost half as fast. Its not very suprising since each core only have to calculate half the dataset in the dual processor solution. This was not quite expected, we expected the FSL link to require more clock cycles. A faster solution could probably be found using direct memory sharing between the two cores. This would reduced the need for sending data over the FSL link but it might increase some time waiting when writing to memory to avoid overwriting data.
+The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not suprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed. Using shared memory between the cores instead may yield even better performance, as no data would have to be exchanged at all.
 
-The hardware accelerated solution is significantly faster than both the single and dual processor solution. The custom IP core written in VHDL is significantly faster than the MicroBlaze core. The GCD algorithm is moved completley to a hardware solution. The MicroBlaze core is only responsible for FSL communication(and input/output but its not measured). A drawback with our solution is the lack of a GCD for N numbers, ours only provide a GCD for 2 numbers. This requires our VHDL core to wait for the MicroBlaze core each calculation. A faster solution could bave been implemented using a N number GCD in VHDL. Our expectations where quite right, we assumed the hardware solution would be faster but not that much faster. We also assumed we wouldnt get a fast result due to the 2 number GCD instead of the N number GCD.
+The hardware accelerated solution is almost an order of magnitude faster than both the single and dual processor solution. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
 
-In Listing 1 its easy to see that the clock cycles required to calculate the GCD with 30 numbers is very much slower than the rest. This is due to a drawback in the euclidean algorithm. The effciency is described by the number of divisions required. Our version uses the subtraction method so instead of division requried its described by the number of subtractions needed. In the sample data(found at cs.lth.se/edan15/labs/assignments) it can be seen that the GCD for the file contaning 30 numbers is 3 while the GCD for 100 numbers is 587. It can also be noted that the number range is quite similar in both the sample files. This requires our algorithm to do a significant more amount of subtractions in the file contaning 30 numbers than the one containing 100 numbers. This increases the number of clock cycles required to calculate the GCD.
-
+Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
 
 %How about compiler optimizations? 
 
 
 \subsection{Device Utilization}
-Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
-
+%Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
 
 \begin{table}[htbp]
    \centering
    %\topcaption{Table captions are better up top} % requires the topcapt package
    \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
       \toprule
-      \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
-	Name	& Single Processor	& Dual processor	& Hardware accelerated\\
+	Name	& Single processor	& Dual processor	& Hardware accelerated\\
       \midrule
       Number of slice registers	& 24978			& 12726			&1595\\
       Number of slice LUT	& 1992704		&  928490		&100623\\
