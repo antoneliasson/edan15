@@ -7,6 +7,7 @@
 \usepackage{listings}		% for listings
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -134,44 +135,47 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
 \begin{table}[htbp]
   \centering
   % \topcaption{Table captions are better up top} % requires the topcapt package
-  \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
+  \begin{tabular}{lrrrr} % Column formatting, @{} suppresses leading/trailing space
     \toprule
     Name & Single processor & Dual processor & Hardware accelerated & Available \\
     \midrule
-    CLB Flip-Flops & 1,684 &  & 18,224 &  \\
-    LUTs used as logic &  &  &  & 9,112 \\
-    LUTs used as memory &  &  & 2,176 &  \\
-    Occupied Slices &  &  &  & 2,278 \\
-    16K block RAMs &  &  &  & 32 \\
+    CLB Flip-Flops & 1,684 & 2,499 & 1,812 & 18,224 \\ % Slice Registers
+    LUTs used as logic & 2,092 & 3,222 & 2,352 & 9,112 \\
+    LUTs used as memory & 152 & 301 & 187 & 2,176 \\ % RAM, dvs processorregister? samt skiftregister
+    Occupied Slices & 962 & 1,411 & 992 & 2,278 \\
+    16K block RAMs & 16 & 32 & 16 & 32 \\
     \bottomrule
   \end{tabular}
-  \caption{Clock cycles using the different solutions explained in chapter 2.}
+  \caption{Hardware utilization with the different solutions implemented}
   \label{tab:Utilization}
 \end{table}
 
 \subsection{Power and Energy}
-The power and energy consumption are presented in Table 3. The power has been captured with the XPower Analyser that comes with the Xilinx ISE. The energy consumption has been calculated using (1).The clock cycles are choosen from the GCD with 50 numbers presented in Table 1. 
+The power and energy usage numbers are presented in table~\ref{tab:Power}. The power has been estimated with the Xilinx XPower Analyser. The energy consumption has been calculated using formula~\eqref{eq:energy} where the frequency is 100 MHz. The result is measured in Watt-seconds, or Joules. For the energy consumption comparisons, the performance numbers for $N=30$ was used, as this had the longest run-time across all three implementations.
+
 \begin{equation}
-E = P \Delta t = P *(frequency*clock cycles)
+  \label{eq:energy}
+  E = P \Delta t = P \cdot \frac{clock\ cycles}{frequency}
 \end{equation}
-The power consumption are very alike in all solutions. The base value has to be the single processor solution since it uses as little of the boards resources as possible. There is a raise in the dual processor solution that comes with the added processor. In the hardware accelerated solution there is a slight raise, this is due to the added VHDL core.
-However in the energy consumption there is a significant difference. This is not unexpected since the amount of clock cycles are very different. From the equation(1) its quite easy to see how the time influences the energy consumption. The difference in the single and dual processor power doesn't influence much on the result since the clock cycles are halfed.
+
+The power consumption does not differ much between the implementations. The single processor implementation has the lowest power consumption. This was expected, since it has the least amount of hardware. The increase in power consumption when a second MicroBlaze core was added is surprisingly small. As with the hardware utilization, this is probably explained by the fact that a lot of the hardware is shared by the the processors. The power consumption in the hardware accelerated solution is only slightly higher than the uniprocessor solution. This was not surprising, since the hardware IP core is very small and simple.
+
+There was however a significant difference in the energy consumption between the implementations. After reading the power consumption number, this was not unexpected since the energy consumption is proportional to the clock cycles used, as can be seen in formula~\eqref{eq:energy}. As the power is fairly constant between the implementations, the energy used by the hardware solution is an order of magnitude lower than the software implementations.
 
 \begin{table}[htbp]
-   \centering
-   %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{@{} cccc @{}} % Column formatting, @{} suppresses leading/trailing space
-      \toprule
-      \cmidrule(r){1-2} % Partial rule. (r) trims the line a little bit on the right; (l) & (lr) also possible
-		& Single Processor	& Dual processor	& Hardware accelerated\\
-      \midrule
-      Power(W)	& 0.163			& 0.172			& 0.164\\
+  \centering
+  % \topcaption{Table captions are better up top} % requires the topcapt package
+  \begin{tabular}{lrrr} % Column formatting, @{} suppresses leading/trailing space
+    \toprule
+    & Single processor  & Dual processor    & Hardware accelerated\\
+    \midrule
+    Power (W)   & 0.163         & 0.172         & 0.164\\
 
-      Energy	& 0.000027873 		& 0.00001583604		& 0.0000040754\\
-      \bottomrule
-   \end{tabular}
-   \caption{Power consumption and energy calculated using the GCD for 50 numbers in Listing 1}
-   \label{tab:Power}
+    Energy (mJ) & 3.25       & 1.60     & 0.165\\
+    \bottomrule
+  \end{tabular}
+  \caption{Power consumption and energy calculated using the GCD for 50 numbers in Listing 1}
+  \label{tab:Power}
 \end{table}
 
 \section{Summary\label{sec:summary}}
