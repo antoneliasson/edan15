@@ -12,6 +12,11 @@
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{url}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{abibfile.bib}
 
 \title{An embedded system, from software to hardware\\\small{(EDAN15 VT15 Final Report)}}
 \author{
@@ -178,7 +183,8 @@ There was however a significant difference in the energy consumption between the
 It has become very clear during the sessions how software and hardware relate to each other in question of performance.
 %In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
 
-\bibliographystyle{plain}
-\bibliography{abibfile}
+%\bibliographystyle{plain}
+%\bibliography{abibfile}
+\printbibliography
 
 \end{document}  
