@@ -158,7 +158,6 @@ The hardware accelerated solution is almost an order of magnitude faster than bo
 Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
 
 \subsection{Device Utilization}
-%Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
 The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}. The table shows that hardware parts that are used exclusively in the MicroBlaze cores, like memories, were basically doubled when a second core is added. However, parts like Flip-Flops that are common in many digital circuits were not doubled. The conclusion was drawn that this is because the entire system also contains parts that are shared between the processor cores, like busses, the clock generator and the reset circuit. There are also hardware interfaces to the UART, which is only used by the master processor, and the completely unused LEDs and DIP-switches.
 
 Table~\ref{tab:Utilization} also shows that with two processors using 32 KiB RAM each, the FPGA's dedicated block RAMs are completely occupied. This puts an upper limit on the performance of the current software implementation, as no more CPU cores can be added. The custom IP core on the other hand uses very little hardware resources. This was expected, as the IP core is very application specific compared to a general purpose CPU. If greater performance is needed, many more can be added to the system to work in parallel before the FPGA is fully occupied.
@@ -208,9 +207,12 @@ There was however a significant difference in the energy consumption between the
 \end{table}
 
 \section{Summary\label{sec:summary}}
-It has become very clear during the sessions how software and hardware relate to each other in question of performance.
-%In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
+The experiments that were detailed and analyzed in this report show that it can be very beneficial in both performance and energy usage to implement time-consuming parts of an algorithm in hardware. Massive gains were observed when a hardware IP core was developed to compute the GCD of two integers in a program that computes the GCD of an arbitrary number of integers. For a very small additional cost in FPGA fabric area and power consumption, the run-time of the program decreased by an order of magnitude, causing the energy usage to decrease by almost as much.
 
-\printbibliography
+Simply parallelizing the algorithm to run on two processor showed similar improvements, albeit not to as large extent. The fairly low increase in power consumption when adding a second core was initially surprising. It did demonstrate the relatively high constant cost in terms of support circuits required of implementing a computer with a single processor core. As the number of cores increase, this constant cost becomes less relevant.
 
-\end{document}  
+The experiments gave a valuable insight in hardware development using the hardware description language VHDL. Splitting the algorithm into a clocked and a combinatorial part was initially challenging as it requires a different mindset than is used in software programming.
+
+Writing the report was a valuable exercise in reading and writing timing and state diagrams. When working with projects like this, they can be very useful.
+
+\end{document}
