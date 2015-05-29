@@ -42,14 +42,10 @@ This is a report on the laboratory work in the \emph{Design of Embedded Systems 
 
 The report is organized as follows. Chapter~\ref{sec:exp} describes the experiments conducted throughout the five laboratory sessions. Chapter~\ref{sec:measurements} presents and discusses the measurements obtained during the experiments. Chapter~\ref{sec:summary} concludes the report with a summary.
 
-
-%This is the part where you give background information and prepare the reader to deal with the rest of the document. \textit{This is the final report on the laboratory work in the Embedded Systems Design (EDAN15) course, LTH \ldots} Describe the lab work organization, its relation to the rest of the course as you see it.
-
-%\textit{The rest of the report is organized as follows. Section \ref{sec:exp} describes the experimental setup of each of the four labs. \ldots} Half a page for introduction will suffice.
 \section{Experiments\label{sec:exp}}
-The experiments were carried out over five lab sessions. The goal was to evaluate software and hardware solutions running on a Xilinix Digilent Nexys-3 FPGA platform. All software was developed in C. In every solution the performance (run-time), FPGA area utilization and power was recorded for later comparison.
-%mention AXI? //Daniel
-%Describe overall. Xilinx ISE Design Suite 14.x Digilent Nexys-3
+The experiments were carried out over five lab sessions. The goal was to evaluate software and hardware solutions running on a Xilinix Digilent Nexys-3 FPGA platform. All software was developed in C for the MicroBlaze\cite{microblaze} CPU architecture. The MicroBlaze is very customizable but in this project, the default settings were used. 32 KiB of RAM was assigned to each processor core an AXI bus was used for communication between the CPUs and their peripherals.
+
+The system clock was set to 100 MHz. For timing measurements, an \emph{axi\_timer}\cite{axi-timer} connected to the AXI bus was used. A simple UART, also connected to the AXI bus, was used for communication with the operator. The hardware was described and synthesized using Xilinx Design Suite 14. In every solution the performance (run-time), FPGA area utilization and power was recorded for later comparison.
 
 The first laboratory was to implement and compare two pure software solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
 
@@ -59,7 +55,6 @@ The third and fourth laboratory session was to select a part of the GCD algorith
 
 The last laboratory session was to integrate the hardware developed in the previous sessions into a larger system. It has software to communicate with the operator over a serial link, similar to the uniprocessor solution, but uses the hardware core for the actual computations.
 
-%Describe what you have to do as laboratory work. Describe your application, target platform. Give information about the host platform and tool chain. Use references (here and whenever appropriate elsewhere in the report) to publications \cite{microblaze} or web pages (e.g. for companies \cite{xilinx}). Do avoid giving random web pages and wikipedia as reliable sources of information.
 \subsection{Software algorithms}
 The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. The algoritm in pseudocode to calculate the GCD for two integers is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
 
@@ -131,6 +126,7 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
 
 \subsection{Device Utilization}
 %Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
+The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}
 
 \begin{table}[htbp]
   \centering
