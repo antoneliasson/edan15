@@ -61,7 +61,7 @@ The third and fourth laboratory session was to select a part of the GCD algorith
 The last laboratory session was to integrate the hardware developed in the previous sessions into a larger system. It has software to communicate with the operator over a serial link, similar to the uniprocessor solution, but uses the hardware core for the actual computations.
 
 \subsection{Software algorithms}
-The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. The algoritm in pseudocode to calculate the GCD for two integers is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
+The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. An algoritm in pseudocode to calculate the GCD for two integers\cite[pp. 318-320]{knuth} is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:gcd]
 function gcd(a,b)
@@ -131,7 +131,7 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
 
 \subsection{Device Utilization}
 %Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
-The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}
+The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}.
 
 \begin{table}[htbp]
   \centering
@@ -152,7 +152,7 @@ The Xilinx tools are capable of exporting hardware utilization numbers in great 
 \end{table}
 
 \subsection{Power and Energy}
-The power and energy usage numbers are presented in table~\ref{tab:Power}. The power has been estimated with the Xilinx XPower Analyser. The energy consumption has been calculated using formula~\eqref{eq:energy} where the frequency is 100 MHz. The result is measured in Watt-seconds, or Joules. For the energy consumption comparisons, the performance numbers for $N=30$ was used, as this had the longest run-time across all three implementations.
+The power and energy usage numbers are presented in table~\ref{tab:Power}. The power has been estimated with the Xilinx XPower Analyser. The energy consumption has been calculated using equation~\eqref{eq:energy} where the frequency is 100 MHz. The result is measured in Watt-seconds, or Joules. For the energy consumption comparisons, the performance numbers for $N=30$ was used, as this had the longest run-time across all three implementations.
 
 \begin{equation}
   \label{eq:energy}
@@ -161,7 +161,7 @@ The power and energy usage numbers are presented in table~\ref{tab:Power}. The p
 
 The power consumption does not differ much between the implementations. The single processor implementation has the lowest power consumption. This was expected, since it has the least amount of hardware. The increase in power consumption when a second MicroBlaze core was added is surprisingly small. As with the hardware utilization, this is probably explained by the fact that a lot of the hardware is shared by the the processors. The power consumption in the hardware accelerated solution is only slightly higher than the uniprocessor solution. This was not surprising, since the hardware IP core is very small and simple.
 
-There was however a significant difference in the energy consumption between the implementations. After reading the power consumption number, this was not unexpected since the energy consumption is proportional to the clock cycles used, as can be seen in formula~\eqref{eq:energy}. As the power is fairly constant between the implementations, the energy used by the hardware solution is an order of magnitude lower than the software implementations.
+There was however a significant difference in the energy consumption between the implementations. After reading the power consumption number, this was not unexpected since the energy consumption is proportional to the clock cycles used, as can be seen in equation~\eqref{eq:energy}. As the power is fairly constant between the implementations, the energy used by the hardware solution is an order of magnitude lower than the software implementations.
 
 \begin{table}[htbp]
   \centering
