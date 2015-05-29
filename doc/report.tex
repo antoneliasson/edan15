@@ -48,9 +48,9 @@ This is a report on the laboratory work in the \emph{Design of Embedded Systems 
 The report is organized as follows. Chapter~\ref{sec:exp} describes the experiments conducted throughout the five laboratory sessions. Chapter~\ref{sec:measurements} presents and discusses the measurements obtained during the experiments. Chapter~\ref{sec:summary} concludes the report with a summary.
 
 \section{Experiments\label{sec:exp}}
-The experiments were carried out over five lab sessions. The goal was to evaluate software and hardware solutions running on a Xilinix Digilent Nexys-3 FPGA platform. All software was developed in C for the MicroBlaze\cite{microblaze} CPU architecture. The MicroBlaze is very customizable but in this project, the default settings were used. 32 KiB of RAM was assigned to each processor core an AXI bus was used for communication between the CPUs and their peripherals.
+The experiments were carried out over five lab sessions. The goal was to evaluate software and hardware solutions running on a Xilinix Digilent Nexys-3 FPGA platform. All software was developed in C for the MicroBlaze\cite{microblaze} CPU architecture. The MicroBlaze is very customizable but in this project, the default settings were used. This optimized the CPU for the smallest area. 32 KiB of RAM was assigned to each processor core an AXI bus was used for communication between the CPUs and their peripherals.
 
-The system clock was set to 100 MHz. For timing measurements, an \emph{axi\_timer}\cite{axi-timer} connected to the AXI bus was used. A simple UART, also connected to the AXI bus, was used for communication with the operator. The hardware was described and synthesized using Xilinx Design Suite 14. In every solution the performance (run-time), FPGA area utilization and power was recorded for later comparison.
+The system clock was set to 100 MHz. For timing measurements, an \emph{axi\_timer}\cite{axi-timer} connected to the AXI bus was used. A simple UART, also connected to the AXI bus, was used for communication with the operator. The hardware was described and synthesized using Xilinx Design Suite 14.2. In every solution the performance (run-time), FPGA area utilization and power was recorded for later comparison.
 
 The first laboratory was to implement and compare two pure software solution of a Greatest Common Divisor (GCD) algorithm for N numbers. Furthermore, the software has to run on a single processor system.
 
@@ -80,8 +80,7 @@ The single processor system was implemented using a single MicroBlaze core. A si
 
 \subsection{Dual processor}
 The dual processor system was implemented using two identical MicroBlaze cores with separate memory. The two cores communicates using two unidirectional Fast Simplex Links (FSL), creating a bidirectional interface. A master-slave model of communication between the cores was used. The master core receives data from the serial link, splits the data set into two halves and sends one half over FSL to the slave core. The cores calculate the GCD for their own halves separately and in the end the slave sends its result back over FSL. The master computes the GCD for the final two values and sends the result back over the serial link.
-% TODO: flytta till diskussion: This was choosen over sharing memory between the two cores. 
-%Describe what is specific to this solution. How do you divide the work between the processors? How do you communicate in between them? Are there any other ways to do this? How did you make sure your solution works properly? How did you test it? Debug it in any way?
+
 \subsection{Hardware accelerated}
 The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial and outputs each element in the data set over FSL to the hardware core. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL.
 
@@ -102,15 +101,15 @@ This section describes the results obtained from the experiments. To get consist
 \begin{table}[htbp]
    \centering
    %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{rrrrr} % Column formatting, @{} suppresses leading/trailing space
+   \begin{tabular}{rrrrrr} % Column formatting, @{} suppresses leading/trailing space
       \toprule
-	N & GCD & Single processor	& Dual processor	& Hardware accelerated\\
+	N & GCD & Single processor	& Dual processor & Dual/single ratio & Hardware accelerated\\
       \midrule
-      10	& 71 & 24978			& 12726			&1595\\
-      30	& 3 & 1992704		&  928490		&100623\\
-      50	& 6211 & 17097			& 9207			&2485\\
-      70	& 128 & 108319		& 58745			&7688\\
-     100	& 587 & 37876			&  21217		&5129\\
+      10	& 71 & 24978			& 12726	& 51 \%		&1595\\
+      30	& 3 & 1992704		&  928490	& 47 \%	&100623\\
+      50	& 6211 & 17097			& 9207	& 54 \%		&2485\\
+      70	& 128 & 108319		& 58745	& 54 \%		&7688\\
+     100	& 587 & 37876			&  21217 & 56 \%		&5129\\
       \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
@@ -120,7 +119,9 @@ This section describes the results obtained from the experiments. To get consist
 
 
 \subsection{Performance}
-The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not suprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed. Using shared memory between the cores instead may yield even better performance, as no data would have to be exchanged at all.
+The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not suprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
+
+It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing the \texttt{putfsl} command to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
 
 The hardware accelerated solution is almost an order of magnitude faster than both the single and dual processor solution. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
 
@@ -131,7 +132,9 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
 
 \subsection{Device Utilization}
 %Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
-The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}.
+The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}. The table shows that hardware parts that are used exclusively in the MicroBlaze cores, like memories, were basically doubled when a second core is added. However, parts like Flip-Flops that are common in many digital circuits were not doubled. The conclusion was drawn that this is because the entire system also contains parts that are shared between the processor cores, like busses, the clock generator and the reset circuit. There are also hardware interfaces to the UART, which is only used by the master processor, and the completely unused LEDs and DIP-switches.
+
+Table~\ref{tab:Utilization} also shows that with two processors using 32 KiB RAM each, the FPGA's dedicated block RAMs are completely occupied. This puts an upper limit on the performance of the current software implementation, as no more CPU cores can be added. The custom IP core on the other hand uses very little hardware resources. This was expected, as the IP core is very application specific compared to a general purpose CPU. If greater performance is needed, many more can be added to the system to work in parallel before the FPGA is fully occupied.
 
 \begin{table}[htbp]
   \centering
@@ -159,7 +162,7 @@ The power and energy usage numbers are presented in table~\ref{tab:Power}. The p
   E = P \Delta t = P \cdot \frac{clock\ cycles}{frequency}
 \end{equation}
 
-The power consumption does not differ much between the implementations. The single processor implementation has the lowest power consumption. This was expected, since it has the least amount of hardware. The increase in power consumption when a second MicroBlaze core was added is surprisingly small. As with the hardware utilization, this is probably explained by the fact that a lot of the hardware is shared by the the processors. The power consumption in the hardware accelerated solution is only slightly higher than the uniprocessor solution. This was not surprising, since the hardware IP core is very small and simple.
+The power consumption does not differ much between the implementations. The single processor implementation has the lowest power consumption. This was expected, since it has the least amount of hardware. The increase in power consumption when a second MicroBlaze core was added is surprisingly small. As with the hardware utilization, this is probably explained by the fact that a lot of the hardware is shared by the the processors. The power consumption in the hardware accelerated solution is only slightly higher than the uniprocessor solution. This was not surprising, since the hardware IP core as mentioned in the previous section is very small and simple.
 
 There was however a significant difference in the energy consumption between the implementations. After reading the power consumption number, this was not unexpected since the energy consumption is proportional to the clock cycles used, as can be seen in equation~\eqref{eq:energy}. As the power is fairly constant between the implementations, the energy used by the hardware solution is an order of magnitude lower than the software implementations.
 
