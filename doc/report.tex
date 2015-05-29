@@ -60,11 +60,11 @@ The algorithm chosen for computation of the greatest common divisor is the Eucli
 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:gcd]
 function gcd(a,b)
-	while(a != b) {
-		if a>b
-			a = a-b
+	while b != 0 {
+		if a > b
+			a = a - b
 		else
-			b = b-a
+			b = b - a
 	}
 	return a
 }
