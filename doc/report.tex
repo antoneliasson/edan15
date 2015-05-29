@@ -94,14 +94,12 @@ The part chosen for hardware acceleration was the GCD algorithm for two numbers.
 \end{figure}
 
 \section{Measurements and Discussion\label{sec:measurements}}
-This section describes the results obtained from the experiments. To get consistent results, the timer was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
-%This is probably the most important part of the report. In here you must describe the what and how you measure. Describe any specific parts in the hardware architecture or the software that help you conduct measurements. You should use graphs or tables to present your results, such as Table \ref{tab:example} or \ref{tab:example2}, but do not forget to describe the measures and units in the columns or graph axis.
+This section describes the results obtained from the experiments. To get consistent results, the \emph{axi\_timer} that was used was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
 
-% Requires the booktabs if the memoir class is not being used
 \begin{table}[htbp]
    \centering
    %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{rrrrrr} % Column formatting, @{} suppresses leading/trailing space
+   \begin{tabular}{l|rrrrr} % Column formatting, @{} suppresses leading/trailing space
       \toprule
 	N & GCD & Single processor	& Dual processor & Dual/single ratio & Hardware accelerated\\
       \midrule
@@ -116,7 +114,27 @@ This section describes the results obtained from the experiments. To get consist
    \label{tab:Clockcycles}
 \end{table}
 
+Table~\ref{tab:opt} shows some clock cycle measurements as well as compiled code sizes for different optimization levels. Again $N=30$ in all samples. It is clear that some optimization can vastly improve the performance of software implemented algorithms, while also reducing the code size. Further optimization appears to worsen the performance while also increasing the code size slightly. One possible explanation for this is that high levels of optimization tends to for instance unroll loops which increases the code size. Larger code causes more instruction cache misses which in turn causes more slow memory access operations. Unfortunately, all but the $O=0$ performance measurement of the uniprocessor implementation were lost.
 
+The program used in the hardware accelerated solution basically only handles communication between the operator and the custom IP core and does not do any actual calculations. For this reason, optimizing it does not do much difference to the run-time of the entire program.
+
+Column~6 in table~\ref{tab:opt} lists the code sizes of the slave program in the dual processor software solution. Column~7 lists the only (master) program in the hardware accelerated solution. As the master program does much more than the slave program (for example handles the UART communication), their sizes cannot be directly compared in a meaningful way.
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{l|rrrrrr}
+    \toprule
+    O & Single  & Dual  & Hardware  & Hardware/dual ratio & Slave size & Hardware master size \\
+    \midrule
+    0 & 1,993 k & 928 k & 100.6 k & 11 \% & 9,994 & 9,866 \\
+    1 &         & 356 k & 100.1 k & 28 \% & 5,986 & 9,246 \\
+    2 &         & 371 k & 100.1 k & 27 \% & 5,994 & 9,254 \\
+    3 &         & 464 k & 100.1 k & 22 \% & 6,086 & 9,390 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Performance and code size for different optimization levels}
+  \label{tab:opt}
+\end{table}
 
 \subsection{Performance}
 The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not suprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
