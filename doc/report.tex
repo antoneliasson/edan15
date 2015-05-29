@@ -79,13 +79,6 @@ The dual processor system was implemented using two identical MicroBlaze cores w
 \subsection{Hardware accelerated}
 The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial and outputs each element in the data set over FSL to the hardware core. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL.
 
-\begin{figure}[!htb]
-   \centering
-   \includegraphics[width=1\textwidth]{timingdiagrams/write.pdf}
-   \caption{Timing diagram for an FSL write operation}
-   \label{fig:fsl-write}
-\end{figure}
-
 \begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{timingdiagrams/read.pdf}
@@ -93,12 +86,25 @@ The part chosen for hardware acceleration was the GCD algorithm for two numbers.
   \label{fig:fsl-read}
 \end{figure}
 
+Figure~\ref{fig:fsl-write} shows the timing diagram for an FSL read operation. Pulsing the \emph{Rd\_ack} high for one clock cycle causes the next word in the buffer to be moved to \emph{D\_in} on the next low-high clock transition. \emph{Exists} tells the recipient that more data is available in the buffer.
+
+\begin{figure}
+   \centering
+   \includegraphics[width=1\textwidth]{timingdiagrams/write.pdf}
+   \caption{Timing diagram for an FSL write operation}
+   \label{fig:fsl-write}
+\end{figure}
+
+Figure~\ref{fig:fsl-write} shows the timing diagram for an FSL write operation. There is no acknowledgement signal here. The sender tells the FSL bus that it is writing a word to \emph{D\_out} on each clock cycle as long as it is holding \emph{Wr\_en} high. It is allowed to do so as long as the recipients buffer is not full, as indicated by the \emph{Full} signal.
+
 \begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{statediagrams/hwstatediagram.pdf}
   \caption{State diagram for the custom IP core}
   \label{fig:state}
 \end{figure}
+
+A Mealy machine state diagram for the custom IP core is shown in figure~\ref{fig:state}. Inputs are shown in black and outputs in green. Some transitions don't have transition conditions, and some lacks outputs. This is because the state diagram shows a clocked circuit and during some transitions signals like \emph{Rd\_ack} must be held high for exactly one clock cycle and then pulled low again.
 
 \section{Measurements and Discussion\label{sec:measurements}}
 This section describes the results obtained from the experiments. To get consistent results, the \emph{axi\_timer} that was used was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
