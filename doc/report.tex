@@ -1,16 +1,11 @@
 \documentclass[11pt]{article}
-\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
-\geometry{a4paper}                   % ... or a4paper or a5paper or ... 
-%\geometry{landscape}                % Activate for for rotated page geometry
-%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{geometry}
+\geometry{a4paper}
 \usepackage{graphicx}
-\usepackage{listings}		% for listings
+\usepackage{listings}
 \usepackage{booktabs}
-\usepackage{multirow}
 \usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{epstopdf}
-\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{url}
 \usepackage[english]{babel}
 \usepackage{csquotes}
@@ -84,8 +79,6 @@ The dual processor system was implemented using two identical MicroBlaze cores w
 \subsection{Hardware accelerated}
 The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial and outputs each element in the data set over FSL to the hardware core. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL.
 
-%Describe your specific hardware accelerator. Describe the structure and behavior. Why did you choose to implement exactly this part of the algorithm? How does it fit in the whole system? How did you make sure your solution works properly? How did you test it? Debug it in any way?
-
 \begin{figure}[!htb]
    \centering
    \includegraphics[width=1\textwidth]{timingdiagrams/write.pdf}
@@ -98,8 +91,7 @@ This section describes the results obtained from the experiments. To get consist
 
 \begin{table}[htbp]
    \centering
-   %\topcaption{Table captions are better up top} % requires the topcapt package
-   \begin{tabular}{l|rrrrr} % Column formatting, @{} suppresses leading/trailing space
+   \begin{tabular}{l|rrrrr}
       \toprule
 	N & GCD & Single processor	& Dual processor & Dual/single ratio & Hardware accelerated\\
       \midrule
@@ -145,9 +137,6 @@ The hardware accelerated solution is almost an order of magnitude faster than bo
 
 Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
 
-%How about compiler optimizations? 
-
-
 \subsection{Device Utilization}
 %Give the FPGA resources consumed by each of your solutions. Explain how these relate to each other -- e.g. whether a dual processor system has double the area of a single processor system and how do these relate to the hardware accelerated solution. Explain why or how using different algorithms influences or not the device utilization.
 The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}. The table shows that hardware parts that are used exclusively in the MicroBlaze cores, like memories, were basically doubled when a second core is added. However, parts like Flip-Flops that are common in many digital circuits were not doubled. The conclusion was drawn that this is because the entire system also contains parts that are shared between the processor cores, like busses, the clock generator and the reset circuit. There are also hardware interfaces to the UART, which is only used by the master processor, and the completely unused LEDs and DIP-switches.
@@ -156,8 +145,7 @@ Table~\ref{tab:Utilization} also shows that with two processors using 32 KiB RAM
 
 \begin{table}[htbp]
   \centering
-  % \topcaption{Table captions are better up top} % requires the topcapt package
-  \begin{tabular}{lrrrr} % Column formatting, @{} suppresses leading/trailing space
+  \begin{tabular}{lrrrr}
     \toprule
     Name & Single processor & Dual processor & Hardware accelerated & Available \\
     \midrule
@@ -186,8 +174,7 @@ There was however a significant difference in the energy consumption between the
 
 \begin{table}[htbp]
   \centering
-  % \topcaption{Table captions are better up top} % requires the topcapt package
-  \begin{tabular}{lrrr} % Column formatting, @{} suppresses leading/trailing space
+  \begin{tabular}{lrrr}
     \toprule
     & Single processor  & Dual processor    & Hardware accelerated\\
     \midrule
@@ -204,8 +191,6 @@ There was however a significant difference in the energy consumption between the
 It has become very clear during the sessions how software and hardware relate to each other in question of performance.
 %In this part you briefly summarize your report. Continue with conclusions, lessons learned, unexpected results, unsolved problems or other issues that remain open. Relate back to the content of the course and explain whether or how the laboratory work helped you or not with understanding certain issues from the theoretical part.
 
-%\bibliographystyle{plain}
-%\bibliography{abibfile}
 \printbibliography
 
 \end{document}  
