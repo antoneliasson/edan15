@@ -1,0 +1,30 @@
+' -*- mode: scala -*-
+' Kompileras med PlantUML.
+'
+' Syntaxen är hyfsat lik Scala, så raden ovan instruerar Emacs att använda det
+' läget så fungerar indentering och highlighting bra.
+
+@startuml
+
+hide empty description
+
+[*] --> S_read1
+
+S_read1 --> S_ack1 : Exists = '1' / <color:green> NextA <= D_in </color>
+
+S_ack1 --> S_read2 : -- / <color:green> Rd_ack <= '1' </color>
+
+S_read2 --> S_ack2 : Exists = '1' / <color:green> -- </color>
+
+S_ack2 --> S_calc1 : -- / <color:green> NextB <= D_in; Rd_ack <= '1' </color>
+
+S_calc1 --> S_write : CurrentA = 0 / <color:green> -- </color>
+S_calc1 --> S_calc2 : CurrentA <> 0 / <color:green> -- </color>
+
+S_calc2 --> S_calc2 : CurrentA > CurrentB / <color:green>NextA <= CurrentA-CurrentB</color>\nCurrentA <= CurrentB / <color:green>NextB <= CurrentB-CurrentA</color>
+S_calc2 --> S_write : CurrentB = 0 / <color:green> -- </color>
+
+S_write --> S_write : Full = '1' / <color:green> -- </color>
+S_write --> S_read1 : Full = '0' / <color:green> D_out <= CurrentA; Wr_en <= '1'</color>
+
+@enduml
