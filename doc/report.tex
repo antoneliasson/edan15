@@ -18,7 +18,7 @@
 Anton Eliasson, \texttt{dat11ael@student.lu.se}\\
 Daniel Lundell, \texttt{ada10dlu@student.lu.se}
 }
-%\date{}                                           % Activate to display a given date or no date
+\date{2015-05-29}                                           % Activate to display a given date or no date
 
 \begin{document}
 \lstset{
@@ -30,11 +30,11 @@ Daniel Lundell, \texttt{ada10dlu@student.lu.se}
 \maketitle
 
 \begin{abstract}
-This report details the laboratory work where, during five sessions, software and hardware solvers of the Greatest Common Divisor were implemented and compared. A software solution was developed for a uniprocessor system and later parallelized to run on a dual processor system. Parts of it were then implemented in hardware. The solutions were profiled and discussed from three perspectives: performance, hardware utilization and energy consumption. The results demonstrate that significant performance improvements and decreased energy consumption can be gained when algorithm implementations approach hardware. It was shown that power and energy consumption do not neccessarily correlate and that an implementation with slightly higher power requirements can have a much lower total energy consumption.
+This report details the laboratory work where, during five sessions, software and hardware solvers of the Greatest Common Divisor were implemented and compared. A software solution was developed for a uniprocessor system and later parallelized to run on a dual processor system. Parts of it were then implemented in hardware. The solutions were profiled and discussed from three perspectives: performance, hardware utilization and energy consumption. The results demonstrate that significant performance improvements and decreased energy consumption can be gained when algorithm implementations approach hardware. It was shown that power and energy consumption do not necessarily correlate and that an implementation with slightly higher power requirements can have a much lower total energy consumption.
 \end{abstract}
 
 \section{Introduction}
-This is a report on the laboratory work in the \emph{Design of Embedded Systems (EDAN15)} course at LTH. The purpose of the laboratories is to use and implement an embedded system and to observe how different implementations differ in relation to effiency, power and hardware utilization. The assignment is first solved with a pure software solution which is later parallelized and then transformed into a hardware accelerated solution. In addtion the purpose is to explore frameworks and tool chains used in development of embedded systems. The embedded system used in the laboratory is a Xilinx FPGA platform.
+This is a report on the laboratory work in the \emph{Design of Embedded Systems (EDAN15)} course at LTH. The purpose of the laboratories is to use and implement an embedded system and to observe how different implementations differ in relation to efficiency, power and hardware utilization. The assignment is first solved with a pure software solution which is later parallelized and then transformed into a hardware accelerated solution. In addition the purpose is to explore frameworks and tool chains used in development of embedded systems. The embedded system used in the laboratory is a Xilinx FPGA platform.
 
 The report is organized as follows. Chapter~\ref{sec:exp} describes the experiments conducted throughout the five laboratory sessions. Chapter~\ref{sec:measurements} presents and discusses the measurements obtained during the experiments. Chapter~\ref{sec:summary} concludes the report with a summary.
 
@@ -52,7 +52,7 @@ The third and fourth laboratory session was to select a part of the GCD algorith
 The last laboratory session was to integrate the hardware developed in the previous sessions into a larger system. It has software to communicate with the operator over a serial link, similar to the uniprocessor solution, but uses the hardware core for the actual computations.
 
 \subsection{Software algorithms}
-The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. An algoritm in pseudocode to calculate the GCD for two integers\cite[pp. 318-320]{knuth} is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
+The algorithm chosen for computation of the greatest common divisor is the Euclidean algorithm. This was chosen because it is both simple to implement, and because it, in its simplified form that is only valid for positive integers, avoids mathematical operations that are difficult to implement in hardware such as division and modulo. An algorithm in pseudo code to calculate the GCD for two integers\cite[pp. 318-320]{knuth} is shown in listing~\ref{lst:gcd}. To calculate the GCD for an arbitrary number of integers, the fact that the GCD is an associative function is used, so for every $a$, $b$ and $c$, $gcd(a, gcd(b, c)) = gcd(gcd(a, b), c)$ holds.
 
 \begin{lstlisting}[float=tbh,frame=tb,captionpos=b,caption={Euclidean subtracion algorithm},label=lst:gcd]
 function gcd(a,b)
@@ -105,7 +105,10 @@ A Mealy machine state diagram for the custom IP core is shown in figure~\ref{fig
 \section{Measurements and Discussion\label{sec:measurements}}
 This section describes the results obtained from the experiments. To get consistent results, the \emph{axi\_timer} that was used was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
 
-\begin{table}[htbp]
+\subsection{Performance}
+The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not surprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
+
+\begin{table}
    \centering
    \begin{tabular}{l|rrrrr}
       \toprule
@@ -122,13 +125,15 @@ This section describes the results obtained from the experiments. To get consist
    \label{tab:Clockcycles}
 \end{table}
 
-Table~\ref{tab:opt} shows some clock cycle measurements as well as compiled code sizes for different optimization levels. Again $N=30$ in all samples. It is clear that some optimization can vastly improve the performance of software implemented algorithms, while also reducing the code size. Further optimization appears to worsen the performance while also increasing the code size slightly. One possible explanation for this is that high levels of optimization tends to for instance unroll loops which increases the code size. Larger code causes more instruction cache misses which in turn causes more slow memory access operations. Unfortunately, all but the $O=0$ performance measurement of the uniprocessor implementation were lost.
+It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing the \texttt{putfsl} command to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
 
-The program used in the hardware accelerated solution basically only handles communication between the operator and the custom IP core and does not do any actual calculations. For this reason, optimizing it does not do much difference to the run-time of the entire program.
+The hardware accelerated solution is almost an order of magnitude faster than both the single and dual processor solution. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
 
-Column~6 in table~\ref{tab:opt} lists the code sizes of the slave program in the dual processor software solution. Column~7 lists the only (master) program in the hardware accelerated solution. As the master program does much more than the slave program (for example handles the UART communication), their sizes cannot be directly compared in a meaningful way.
+Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
 
-\begin{table}[htbp]
+\subsection{Compiler optimization}
+
+\begin{table}
   \centering
   \begin{tabular}{l|rrrrrr}
     \toprule
@@ -144,21 +149,18 @@ Column~6 in table~\ref{tab:opt} lists the code sizes of the slave program in the
   \label{tab:opt}
 \end{table}
 
-\subsection{Performance}
-The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not suprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
+Table~\ref{tab:opt} shows some clock cycle measurements as well as compiled code sizes for different optimization levels. Again $N=30$ in all samples. It is clear that some optimization can vastly improve the performance of software implemented algorithms, while also reducing the code size. Further optimization appears to worsen the performance while also increasing the code size slightly. One possible explanation for this is that high levels of optimization tends to for instance unroll loops which increases the code size. Larger code causes more instruction cache misses which in turn causes more slow memory access operations. Unfortunately, all but the $O=0$ performance measurement of the uniprocessor implementation were lost.
 
-It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing the \texttt{putfsl} command to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
+The program used in the hardware accelerated solution basically only handles communication between the operator and the custom IP core and does not do any actual calculations. For this reason, optimizing it does not do much difference to the run-time of the entire program.
 
-The hardware accelerated solution is almost an order of magnitude faster than both the single and dual processor solution. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
-
-Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
+Column~6 in table~\ref{tab:opt} lists the code sizes of the slave program in the dual processor software solution. Column~7 lists the only (master) program in the hardware accelerated solution. As the master program does much more than the slave program (for example handles the UART communication), their sizes cannot be directly compared in a meaningful way.
 
 \subsection{Device Utilization}
-The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}. The table shows that hardware parts that are used exclusively in the MicroBlaze cores, like memories, were basically doubled when a second core is added. However, parts like Flip-Flops that are common in many digital circuits were not doubled. The conclusion was drawn that this is because the entire system also contains parts that are shared between the processor cores, like busses, the clock generator and the reset circuit. There are also hardware interfaces to the UART, which is only used by the master processor, and the completely unused LEDs and DIP-switches.
+The Xilinx tools are capable of exporting hardware utilization numbers in great detail. A selection of these that were found interesting are presented in table~\ref{tab:Utilization}. The table shows that hardware parts that are used exclusively in the MicroBlaze cores, like memories, were basically doubled when a second core is added. However, parts like Flip-Flops that are common in many digital circuits were not doubled. The conclusion was drawn that this is because the entire system also contains parts that are shared between the processor cores, like buses, the clock generator and the reset circuit. There are also hardware interfaces to the UART, which is only used by the master processor, and the completely unused LEDs and DIP-switches.
 
 Table~\ref{tab:Utilization} also shows that with two processors using 32 KiB RAM each, the FPGA's dedicated block RAMs are completely occupied. This puts an upper limit on the performance of the current software implementation, as no more CPU cores can be added. The custom IP core on the other hand uses very little hardware resources. This was expected, as the IP core is very application specific compared to a general purpose CPU. If greater performance is needed, many more can be added to the system to work in parallel before the FPGA is fully occupied.
 
-\begin{table}[htbp]
+\begin{table}
   \centering
   \begin{tabular}{lrrrr}
     \toprule
@@ -187,7 +189,7 @@ The power consumption does not differ much between the implementations. The sing
 
 There was however a significant difference in the energy consumption between the implementations. After reading the power consumption number, this was not unexpected since the energy consumption is proportional to the clock cycles used, as can be seen in equation~\eqref{eq:energy}. As the power is fairly constant between the implementations, the energy used by the hardware solution is an order of magnitude lower than the software implementations.
 
-\begin{table}[htbp]
+\begin{table}
   \centering
   \begin{tabular}{lrrr}
     \toprule
@@ -203,7 +205,7 @@ There was however a significant difference in the energy consumption between the
 \end{table}
 
 \section{Summary\label{sec:summary}}
-The experiments that were detailed and analyzed in this report show that it can be very beneficial in both performance and energy usage to implement time-consuming parts of an algorithm in hardware. Massive gains were observed when a hardware IP core was developed to compute the GCD of two integers in a program that computes the GCD of an arbitrary number of integers. For a very small additional cost in FPGA fabric area and power consumption, the run-time of the program decreased by an order of magnitude, causing the energy usage to decrease by almost as much.
+The experiments that were detailed and analysed in this report show that it can be very beneficial in both performance and energy usage to implement time-consuming parts of an algorithm in hardware. Massive gains were observed when a hardware IP core was developed to compute the GCD of two integers in a program that computes the GCD of an arbitrary number of integers. For a very small additional cost in FPGA fabric area and power consumption, the run-time of the program decreased by an order of magnitude, causing the energy usage to decrease by almost as much.
 
 Simply parallelizing the algorithm to run on two processor showed similar improvements, albeit not to as large extent. The fairly low increase in power consumption when adding a second core was initially surprising. It did demonstrate the relatively high constant cost in terms of support circuits required of implementing a computer with a single processor core. As the number of cores increase, this constant cost becomes less relevant.
 
