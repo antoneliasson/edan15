@@ -13,7 +13,7 @@
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{url}
 
-\title{Embedded system, from software to hardware\\\small{(EDAN15 VT15 Final Report)}}
+\title{An embedded system, from software to hardware\\\small{(EDAN15 VT15 Final Report)}}
 \author{
 Anton Eliasson, \texttt{dat11ael@student.lu.se}\\
 Daniel Lundell, \texttt{ada10dlu@student.lu.se}
@@ -113,7 +113,7 @@ This section describes the results obtained from the experiments. To get consist
      100	& 587 & 37876			&  21217		&5129\\
       \bottomrule
    \end{tabular}
-   \caption{Performance numbers with the different solutions implemented}
+   \caption{Performance numbers for the different implementations}
    \label{tab:Clockcycles}
 \end{table}
 
@@ -146,7 +146,7 @@ Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycle
     16K block RAMs & 16 & 32 & 16 & 32 \\
     \bottomrule
   \end{tabular}
-  \caption{Hardware utilization with the different solutions implemented}
+  \caption{Hardware utilization for the different implementations}
   \label{tab:Utilization}
 \end{table}
 
@@ -174,7 +174,7 @@ There was however a significant difference in the energy consumption between the
     Energy (mJ) & 3.25       & 1.60     & 0.165\\
     \bottomrule
   \end{tabular}
-  \caption{Power consumption and energy calculated using the GCD for 50 numbers in Listing 1}
+  \caption{Power and energy consumption for the different implementations calculated from the GCD for $N=30$ results}
   \label{tab:Power}
 \end{table}
 
