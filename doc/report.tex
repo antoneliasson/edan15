@@ -18,7 +18,7 @@
 Anton Eliasson, \texttt{dat11ael@student.lu.se}\\
 Daniel Lundell, \texttt{ada10dlu@student.lu.se}
 }
-\date{2015-05-29}                                           % Activate to display a given date or no date
+%\date{2015-05-29}                                           % Activate to display a given date or no date
 
 \begin{document}
 \lstset{
@@ -110,15 +110,15 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
 
 \begin{table}
    \centering
-   \begin{tabular}{l|rrrrr}
+   \begin{tabular}{l|rrrrrr}
       \toprule
-	N & GCD & Single processor	& Dual processor & Dual/single ratio & Hardware accelerated\\
+	N & GCD & Naive single & Euclid single	& Euclid dual & Dual/single ratio & Hardware \\
       \midrule
-      10	& 71 & 24978			& 12726	& 51 \%		&1595\\
-      30	& 3 & 1992704		&  928490	& 47 \%	&100623\\
-      50	& 6211 & 17097			& 9207	& 54 \%		&2485\\
-      70	& 128 & 108319		& 58745	& 54 \%		&7688\\
-     100	& 587 & 37876			&  21217 & 56 \%		&5129\\
+      10	& 71 & 2,433,868 & 24,978			& 12,726	& 51 \%		&1595\\
+      30	& 3 & 1,992,704 & 1,846,630		&  928,490	& 47 \%	&100623\\
+      50	& 6211 & 13,142,315 & 17,097			& 9,207	& 54 \%		&2485\\
+      70	& 128 & 1,479,966 & 108,319		& 58,745	& 54 \%		&7688\\
+     100	& 587 & 3,152,887 & 37,876			&  21,217 & 56 \%		&5129\\
       \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
