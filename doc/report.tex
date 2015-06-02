@@ -109,17 +109,17 @@ This section describes the results obtained from the experiments. To get consist
 The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not surprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
 
 \begin{table}
-   \centering
+  \centering
    \begin{tabular}{l|rrrrrr}
-      \toprule
-	N & GCD & Naive single & Euclid single	& Euclid dual & Dual/single ratio & Hardware \\
-      \midrule
-      10	& 71 & 2,433,868 & 24,978			& 12,726	& 51 \%		&1595\\
-      30	& 3 & 1,992,704 & 1,846,630		&  928,490	& 47 \%	&100623\\
-      50	& 6211 & 13,142,315 & 17,097			& 9,207	& 54 \%		&2485\\
-      70	& 128 & 1,479,966 & 108,319		& 58,745	& 54 \%		&7688\\
-     100	& 587 & 3,152,887 & 37,876			&  21,217 & 56 \%		&5129\\
-      \bottomrule
+     \toprule
+     N & GCD & Naive single & Euclid single & Euclid dual & Dual/single ratio & Hardware \\
+     \midrule
+     10 & 71 & 2,433,868 & 24,978 & 12,726 & 51 \% & 1,595 \\
+     30 & 3 & 1,992,704 & 1,846,630 & 928,490 & 47 \% & 100,623 \\
+     50 & 6211 & 13,142,315 & 17,097 & 9,207 & 54 \% & 2,485 \\
+     70 & 128 & 1,479,966 & 108,319 & 58,745 & 54 \% & 7,688 \\
+     100 & 587 & 3,152,887 & 37,876 & 21,217 & 56 \% & 5,129 \\
+     \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
    \label{tab:Clockcycles}
