@@ -110,19 +110,53 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
 
 \begin{table}
   \centering
-   \begin{tabular}{l|rrrrrr}
+   \begin{tabular}{l|rrrr}
      \toprule
-     N & GCD & Naive single & Euclid single & Euclid dual & Dual/single ratio & Hardware \\
+     N & GCD & Naive single & Euclid uniprocessor & Euclid/naive ratio \\
      \midrule
-     10 & 71 & 2,433,868 & 24,978 & 12,726 & 50.9 \% & 1,595 \\
-     30 & 3 & 1,992,704 & 1,846,630 & 928,490 & 50.3 \% & 100,623 \\
-     50 & 6211 & 13,142,315 & 17,097 & 9,207 & 53.8 \% & 2,485 \\
-     70 & 128 & 1,479,966 & 108,319 & 58,745 & 54.2 \% & 7,688 \\
-     100 & 587 & 3,152,887 & 37,876 & 21,217 & 56.0 \% & 5,129 \\
+     10 & 71 & 2,433,868 & 24,978 & 50.9 \% \\
+     30 & 3 & 1,992,704 & 1,846,630 & 50.3 \% \\
+     50 & 6211 & 13,142,315 & 17,097 & 53.8 \% \\
+     70 & 128 & 1,479,966 & 108,319 & 54.2 \% \\
+     100 & 587 & 3,152,887 & 37,876 & 56.0 \% \\
      \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
-   \label{tab:Clockcycles}
+   \label{tab:naive-uni}
+\end{table}
+
+\begin{table}
+  \centering
+   \begin{tabular}{l|rrrr}
+     \toprule
+     N & GCD & Euclid single & Euclid dual & Dual/single ratio \\
+     \midrule
+     10 & 71 & 24,978 & 12,726 & 50.9 \% \\
+     30 & 3 & 1,846,630 & 928,490 & 50.3 \% \\
+     50 & 6211 & 17,097 & 9,207 & 53.8 \% \\
+     70 & 128 & 108,319 & 58,745 & 54.2 \% \\
+     100 & 587 & 37,876 & 21,217 & 56.0 \% \\
+     \bottomrule
+   \end{tabular}
+   \caption{Performance numbers for the different implementations}
+   \label{tab:uni-dual}
+\end{table}
+
+\begin{table}
+  \centering
+   \begin{tabular}{l|rrrr}
+     \toprule
+     N & GCD & Euclid single & HW/single ratio & Hardware \\
+     \midrule
+     10 & 71 & 24,978 & 50.9 \% & 1,595 \\
+     30 & 3 & 1,846,630 & 50.3 \% & 100,623 \\
+     50 & 6211 & 17,097 & 53.8 \% & 2,485 \\
+     70 & 128 & 108,319 & 54.2 \% & 7,688 \\
+     100 & 587 & 37,876 & 56.0 \% & 5,129 \\
+     \bottomrule
+   \end{tabular}
+   \caption{Performance numbers for the different implementations}
+   \label{tab:uni-hw}
 \end{table}
 
 It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing the \texttt{putfsl} command to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
