@@ -110,15 +110,15 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
 
 \begin{table}
   \centering
-   \begin{tabular}{l|rrrr}
+   \begin{tabular}{rr|rrr}
      \toprule
      N & GCD & Naive single & Euclid uniprocessor & Euclid/naive ratio \\
      \midrule
-     10 & 71 & 2,433,868 & 24,978 & 50.9 \% \\
-     30 & 3 & 1,992,704 & 1,846,630 & 50.3 \% \\
-     50 & 6211 & 13,142,315 & 17,097 & 53.8 \% \\
-     70 & 128 & 1,479,966 & 108,319 & 54.2 \% \\
-     100 & 587 & 3,152,887 & 37,876 & 56.0 \% \\
+     10 & 71 & 2,433,868 & 24,978 & 1.0 \% \\
+     30 & 3 & 1,992,704 & 1,846,630 & 92.7 \% \\
+     50 & 6211 & 13,142,315 & 17,097 & 1.3 \% \\
+     70 & 128 & 1,479,966 & 108,319 & 7.3 \% \\
+     100 & 587 & 3,152,887 & 37,876 & 1.2 \% \\
      \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
@@ -146,13 +146,13 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
   \centering
    \begin{tabular}{l|rrrr}
      \toprule
-     N & GCD & Euclid single & HW/single ratio & Hardware \\
+     N & GCD & Euclid single & Hardware accelerated & Hardware/single ratio \\
      \midrule
-     10 & 71 & 24,978 & 50.9 \% & 1,595 \\
-     30 & 3 & 1,846,630 & 50.3 \% & 100,623 \\
-     50 & 6211 & 17,097 & 53.8 \% & 2,485 \\
-     70 & 128 & 108,319 & 54.2 \% & 7,688 \\
-     100 & 587 & 37,876 & 56.0 \% & 5,129 \\
+     10 & 71 & 24,978 & 1,595 & 6.4 \% \\
+     30 & 3 & 1,846,630 & 100,623 & 5.4 \% \\
+     50 & 6211 & 17,097 & 2,485 & 14.5 \% \\
+     70 & 128 & 108,319 & 7,688 & 7.1 \% \\
+     100 & 587 & 37,876 & 5,129 & 13.5 \% \\
      \bottomrule
    \end{tabular}
    \caption{Performance numbers for the different implementations}
