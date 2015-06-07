@@ -77,24 +77,6 @@ The part chosen for hardware acceleration was the GCD algorithm for two numbers.
 
 \begin{figure}
   \centering
-  \includegraphics[width=1\textwidth]{timingdiagrams/read.pdf}
-  \caption{Timing diagram for an FSL read operation}
-  \label{fig:fsl-read}
-\end{figure}
-
-Figure~\ref{fig:fsl-write} shows the timing diagram for an FSL read operation. Pulsing the \emph{Rd\_ack} high for one clock cycle causes the next word in the buffer to be moved to \emph{D\_in} on the next low-high clock transition. \emph{Exists} tells the recipient that more data is available in the buffer.
-
-\begin{figure}
-   \centering
-   \includegraphics[width=1\textwidth]{timingdiagrams/write.pdf}
-   \caption{Timing diagram for an FSL write operation}
-   \label{fig:fsl-write}
-\end{figure}
-
-Figure~\ref{fig:fsl-write} shows the timing diagram for an FSL write operation. There is no acknowledgement signal here. The sender tells the FSL bus that it is writing a word to \emph{D\_out} on each clock cycle as long as it is holding \emph{Wr\_en} high. It is allowed to do so as long as the recipients buffer is not full, as indicated by the \emph{Full} signal.
-
-\begin{figure}
-  \centering
   \includegraphics[width=1\textwidth]{statediagrams/hwstatediagram.pdf}
   \caption{State diagram for the custom IP core}
   \label{fig:state}
