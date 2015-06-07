@@ -73,7 +73,7 @@ The single processor system was implemented using a single MicroBlaze core. A si
 The dual processor system was implemented using two identical MicroBlaze cores with separate memory. The two cores communicates using two unidirectional Fast Simplex Links (FSL), creating a bidirectional interface. A master-slave model of communication between the cores was used. The master core receives data from the serial link, splits the data set into two halves and sends one half over FSL to the slave core. The cores calculate the GCD for their own halves separately and in the end the slave sends its result back over FSL. The master computes the GCD for the final two values and sends the result back over the serial link.
 
 \subsection{Hardware accelerated}
-The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial and outputs each element in the data set over FSL to the hardware core. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL.
+The part chosen for hardware acceleration was the GCD algorithm for two numbers. The hardware runs on a custom IP core on the same board as the MicroBlaze core running the software. The software reads the input over serial into a buffer during program startup. It then sends a pair of the input elements over FSL to the hardware core and waits for the result. The GCD is computed in hardware and sent back to the MicroBlaze core over FSL. As long as buffer in the program is not empty, the previous result is sent back to the hardware core along with the next element.
 
 \begin{figure}
   \centering
@@ -163,7 +163,9 @@ It was found that the while the FSL buffers can be quite large, the default size
    \label{tab:uni-hw}
 \end{table}
 
-The hardware accelerated solution is an order of magnitude faster than the single processor implementation of the Euclidean algorithm, as shown by the performance numbers in table~\ref{tab:uni-hw}. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
+The hardware accelerated solution is an order of magnitude faster than the single processor implementation of the Euclidean algorithm, as shown by the performance numbers in table~\ref{tab:uni-hw}. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core.
+
+Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm. The program would first have to send the total number of elements, N, to the hardware core so that it knows how many numbers to expect. The hardware core would then proceed to read two operands, calculate their GCD and then for each result, calculate the GCD between the result and the next operand in the buffer, as long as less than N numbers have been read. Alternatively, the result could be initialized with 1 and the hardware core would then always use the last result as one of the operands. Some kind of reset signal would have to be implemented to reset the result back to 1. This would likely be faster than the current solution because the hardware would spend less time waiting for the CPU to send it more work to do.
 
 \subsection{Compiler optimization}
 
