@@ -106,7 +106,7 @@ A Mealy machine state diagram for the custom IP core is shown in figure~\ref{fig
 This section describes the results obtained from the experiments. To get consistent results, the \emph{axi\_timer} that was used was configured to measure only the actual calculation and not the communication with the operator. In the hardware accelerated solution the timer was started just before the operands were sent to the hardware IP core and stopped just after the final result could be read back.
 
 \subsection{Performance}
-The performance figures are presented in table~\ref{tab:Clockcycles}. In the single and dual processor solution the GCD calculation was done in software only. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets but one, where it takes slightly less than half. This was not surprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. From this we can draw the conclusion that the Fast Simplex Link is very fast indeed.
+Tables \ref{tab:naive-uni}, \ref{tab:uni-dual} and \ref{tab:uni-hw} show the time takes, as measured in CPU clock cycles, to calculate the GCD for the sample data\cite{assignments} using the different solutions implemented. The performance figures from the first lab, comparing a naive algorithm for computing the GCD with an implementation of the Euclidean algorithm, are shown in table~\ref{tab:naive-uni}. It shows that the Euclidean algorithm is almost 100 times faster for all datasets but one (N=30). The divergent result is believed to provoke the worst-case complexity of the Euclidean algorithm since, as will be demonstrated later in this section, it takes significantly more time to compute for all implementations used. There appears to be a negative correlation between the clock cycles required and the final GCD. This could be explained by properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
 
 \begin{table}
   \centering
@@ -125,9 +125,11 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
    \label{tab:naive-uni}
 \end{table}
 
+The performance figures comparing the single and dual processor software implementations are shown in table~\ref{tab:uni-dual}. The results show that the dual processor solution takes just over half the time compared to the single processor solution in all datasets. This was not surprising to us since each core can calculate the GCD for half the dataset independently, without having to wait for or synchronize with the other core until the end. The FSL transfers are included in the clock cycle counts, but the dual processor solution is still almost twice as fast. The fraction-of-a-percent divergence from 50~\% for the small datasets are explained by the constant time required for the FSL transfers.
+
 \begin{table}
   \centering
-   \begin{tabular}{l|rrrr}
+   \begin{tabular}{rr|rrr}
      \toprule
      N & GCD & Euclid single & Euclid dual & Dual/single ratio \\
      \midrule
@@ -142,9 +144,11 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
    \label{tab:uni-dual}
 \end{table}
 
+It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing \texttt{putfsl} to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
+
 \begin{table}
   \centering
-   \begin{tabular}{l|rrrr}
+   \begin{tabular}{rr|rrr}
      \toprule
      N & GCD & Euclid single & Hardware accelerated & Hardware/single ratio \\
      \midrule
@@ -159,11 +163,7 @@ The performance figures are presented in table~\ref{tab:Clockcycles}. In the sin
    \label{tab:uni-hw}
 \end{table}
 
-It was found that the while the FSL buffers can be quite large, the default size is only 16\cite{fsl}. This means that for the larger datasets, the slave CPU's buffer would be filled up, causing the \texttt{putfsl} command to block. It might explain why, for N=50, 70 and 100, the clock cycle ratio between the dual and single processor implementation appears to increase beyond 50 \%. A larger FSL queue depth may yield better performance here. Another performance improvement could be to use shared memory instead, as in that case no data would have to be exchanged at all.
-
-The hardware accelerated solution is almost an order of magnitude faster than both the single and dual processor solution. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
-
-Table~\ref{tab:Clockcycles} shows the time taken (as measured in CPU clock cycles) to calculate the GCD for the sample data\cite{assignments}. The table shows that the time increases when the final GCD decreases. This is because of properties of the euclidean algorithm. The time required is proportional to the number of divisions required, or in its simplified version, the number of subtractions.
+The hardware accelerated solution is an order of magnitude faster than the single processor implementation of the Euclidean algorithm, as shown by the performance numbers in table~\ref{tab:uni-hw}. The GCD calculation is moved completely into hardware. The software is only responsible for communication with the operator and communicating the operands and result with the hardware IP core. Even better performance would likely be obtained by hardware accelerating more parts, like the entire GCD for N numbers algorithm.
 
 \subsection{Compiler optimization}
 
